@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading;
 
 namespace TAsk2_2
 {
@@ -42,24 +43,24 @@ namespace TAsk2_2
             return true;
         }
 
-        private static bool IsWin(string[,] arrayButtons, string player)
+        private static bool IsWin(string[,] array, string player)
         {
             int flag = 0;
             int flag2 = 0;
 
             //Checking rows and columns
 
-            for (int i = 0; i < arrayButtons.GetLength(0); i++)
+            for (int i = 0; i < array.GetLength(0); i++)
             {
-                for (int j = 0; j < arrayButtons.GetLength(1); j++)
+                for (int j = 0; j < array.GetLength(1); j++)
                 {
-                    if (arrayButtons[i, j] == player) flag++;
+                    if (array[i, j] == player) flag++;
                     {
-                        if (flag == arrayButtons.GetLength(0)) return true;
+                        if (flag == array.GetLength(0)) return true;
                     }
-                    if (arrayButtons[j, i] == player) flag2++;
+                    if (array[j, i] == player) flag2++;
                     {
-                        if (flag2 == arrayButtons.GetLength(1)) return true;
+                        if (flag2 == array.GetLength(1)) return true;
                     }
                 }
 
@@ -70,28 +71,31 @@ namespace TAsk2_2
             flag = 0;
 
 //Checking diagonal
-            for (int k = 0; k < arrayButtons.GetLength(0); k++)
+            for (int k = 0; k < array.GetLength(0); k++)
             {
-                if (arrayButtons[k, arrayButtons.GetLength(1) - 1 - k] == player) flag++;
+                if (array[k, array.GetLength(1) - 1 - k] == player) flag++;
             }
 
-            if (flag == arrayButtons.GetLength(0))
+            if (flag == array.GetLength(0))
                 return true;
             flag = 0;
 //Checking diagonal
-            for (int k = 0; k < arrayButtons.GetLength(0); k++)
+            for (int k = 0; k < array.GetLength(0); k++)
             {
-                if (arrayButtons[k, k] == player) flag++;
+                if (array[k, k] == player) flag++;
             }
 
-            if (flag == arrayButtons.GetLength(1))
+            if (flag == array.GetLength(1))
                 return true;
             return false;
         }
 
 
-        static void Turn(string player, string[,] array, int size)
+        static void Turn(string player, string[,] array, out int cell, int size, out int row, out int col)
         {
+            cell = 0;
+            row = 0;
+            col = 0;
             string input;
             bool retryFlag = false;
             do
@@ -101,10 +105,10 @@ namespace TAsk2_2
 
                 try
                 {
-                    int cell = int.Parse(input);
+                    cell = int.Parse(input);
 
-                    int row = cell / size; //calculating the exact row and colom by user's input cell
-                    int col = cell % size;
+                    row = cell / size; //calculating the exact row and colom by user's input cell
+                    col = cell % size;
 
                     if (array[row, col] == "X" || array[row, col] == "O")
                     {
@@ -113,7 +117,7 @@ namespace TAsk2_2
 
                     array[row, col] = player;
 
-                    Print(array, row, col);
+                    Print(array);
                     retryFlag = true;
                 }
                 catch (Exception e)
@@ -123,7 +127,7 @@ namespace TAsk2_2
             } while (retryFlag == false);
         }
 
-        static void Print(string[,] array, int row = -1, int col = -1)
+        static void Print(string[,] array)
         {
             for (int i = 0; i < array.GetLength(0); i++)
             {
@@ -147,23 +151,28 @@ namespace TAsk2_2
             }
         }
 
-        static double CalculatingDistance(string[,] array, int size, int computerCell, int userCell)
+        static double CalculatingDistance(int inputComputerCell, int inputUserCell)
         {
-            int computerRow =
-                computerCell / size; //calculating the exact row and column by computer's cell
-            int computerCol = computerCell % size;
-
-            int userRow = userCell / size; //calculating the exact row and column by user's input cell
-            int userCol = userCell % size;
+            CalculatingCell(inputComputerCell, 3, out int computerCellRow, out int computerCellCol);
+            CalculatingCell(inputUserCell, 3, out int userCellRow, out int userCellCol);
 
             double distance =
-                Math.Sqrt(Math.Abs(Math.Pow(computerRow - userRow, 2) + Math.Pow(computerCol - userCol, 2)));
+                Math.Sqrt(Math.Abs(Math.Pow(computerCellRow - userCellRow, 2) +
+                                   Math.Pow(computerCellCol - userCellCol, 2)));
             return distance;
         }
-        
-        
-        static void ComputerSuperPower(string player)
+
+        static void CalculatingCell(int inputCellNumber, int size, out int cellRow, out int cellCol)
         {
+            cellRow =
+                inputCellNumber / size; //calculating the exact row and column by computer's cell
+            cellCol = inputCellNumber % size;
+        }
+
+        static void ComputerSuperPower()
+        {
+            const string computer = "X";
+            const string player = "O";
             int size = 3;
             string[,] array = new string[size, size];
 
@@ -178,8 +187,190 @@ namespace TAsk2_2
                 Console.WriteLine();
             }
 
-            return;
+            // while (true)
+            // {
+            //     GetBestMove(array, out int bestX, out int bestY);
+            //     array[bestX, bestY] = "X";
+            //     
+            //     if (IsWin(array, "X"))
+            //     {
+            //         Console.WriteLine("X won!");
+            //     }
+            //
+            //     if (IsDraw(array))
+            //     {
+            //         Console.WriteLine("Tie!");
+            //     }
+            //     
+            //     Turn("O", array, out _, 3, out _, out _);
+            //
+            // }
+
+            //First step in the center (cell = 4)
+            CalculatingCell(4, 3, out int computerCellRow, out int computerCellCol);
+            Thread.Sleep(500);
+            Console.Write(".");
+            Thread.Sleep(500);
+            Console.Write(".");
+            Thread.Sleep(500);
+            Console.WriteLine(".");
+
+            Console.WriteLine("Computer chose 4");
+            array[computerCellRow, computerCellCol] = "X";
+            Print(array);
+
+            Turn("O", array, out int userCell, 3, out int row, out int col);
+            //Second step as far as it's possible from O's stepdouble
+            double maxDistance = -1;
+            int minCell = 0;
+
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    if (array[i, j] != "X" && array[i, j] != "Y")
+                    {
+                        int cell = i * size + j;
+                        double distance = CalculatingDistance(cell, userCell);
+                        if (distance > maxDistance)
+                        {
+                            maxDistance = distance;
+                            minCell = cell;
+                        }
+                    }
+                }
+            }
+
+            row = minCell / size;
+            col = minCell % size;
+
+            array[row, col] = "X";
+
+            Thread.Sleep(500);
+            Console.Write(".");
+            Thread.Sleep(500);
+            Console.Write(".");
+            Thread.Sleep(500);
+            Console.WriteLine(".");
+
+            Print(array);
+
+            Turn("O", array, out userCell, 3, out row, out col);
+
+            // Проверяем, может ли противник победить следующим ходом, и блокируем его ход
+            int bestY = -1;
+            int bestX = -1;
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    if (array[i, j] != player && array[i, j] != computer)
+                    {
+                        array[i, j] = player;
+                        if (IsWin(array, player))
+                        {
+                            bestX = i;
+                            bestY = j;
+                            array[i, j] = (i * 3 + j).ToString();
+                        }
+
+                        array[i, j] = (i * 3 + j).ToString();
+                    }
+                }
+            }
+            
+
+            // игрок может победить
+            if (bestX != -1 || bestY != -1)
+            {
+                array[bestX, bestY] = computer;
+            }
+            
+            Thread.Sleep(500);
+            Console.Write(".");
+            Thread.Sleep(500);
+            Console.Write(".");
+            Thread.Sleep(500);
+            Console.WriteLine(".");
+            
+            Print(array);
+            
         }
+
+
+        // public static void GetBestMove(string[,] array, out int bestX, out int bestY)
+        // {
+        //     const string player = "O";
+        //     const string computer = "X";
+        //     bestX = -1;
+        //     bestY = -1;
+        //
+        //     // Проверка на первый ход, если так - выбираем центральную ячейку
+        //     if (array[1, 1] == "4")
+        //     {
+        //         bestX = 1;
+        //         bestY = 1;
+        //         return;
+        //     }
+        //
+        //     // Проверяем, можем ли мы победить следующим ходом
+        //     for (int i = 0; i < 3; i++)
+        //     {
+        //         for (int j = 0; j < 3; j++)
+        //         {
+        //             if (array[i, j] != player && array[i, j] != computer)
+        //             {
+        //                 array[i, j] = computer;
+        //                 if (IsWin(array, computer))
+        //                 {
+        //                     bestX = i;
+        //                     bestY = j;
+        //                     array[i, j] = (i * 3 + j).ToString();
+        //                     return;
+        //                 }
+        //
+        //                 array[i, j] = (i * 3 + j).ToString();
+        //             }
+        //         }
+        //     }
+        //
+        // // Проверяем, может ли противник победить следующим ходом, и блокируем его ход
+        // for (int i = 0; i < 3; i++)
+        // {
+        //     for (int j = 0; j < 3; j++)
+        //     {
+        //         if (array[i, j] != player && array[i, j] != computer)
+        //         {
+        //             array[i, j] = player;
+        //             if (IsWin(array, player))
+        //             {
+        //                 bestX = i;
+        //                 bestY = j;
+        //                 array[i, j] = (i * 3 + j).ToString();
+        //                 return;
+        //             }
+        //
+        //             array[i, j] = (i * 3 + j).ToString();
+        //         }
+        //     }
+        // }
+
+        // Если не можем победить и не нужно блокировать, выбираем любую свободную ячейку
+        //     for (int i = 0; i < 3; i++)
+        //     {
+        //         for (int j = 0; j < 3; j++)
+        //         {
+        //             if (array[i, j] != player && array[i, j] != computer)
+        //             {
+        //                 bestX = i;
+        //                 bestY = j;
+        //                 return;
+        //             }
+        //         }
+        //     }
+        // }
+
+
         // 1 ход: всегда в центр;
         // 2 ход: в угол, который дальше всего от предыдущего хода ноликов;
         //     3 ход: защита от попыток нолика чет выстроить или, что вероятнее, – снова ход в угол;
@@ -212,29 +403,11 @@ namespace TAsk2_2
                 {
                     MultiplayerBigField(size);
                 }
-
-
             }
             else
             {
-                int size = 3;
-                string[,] array = new string[size, size];
-
-                for (int i = 0; i < array.GetLength(0); i++)
-                {
-                    for (int j = 0; j < array.GetLength(1); j++)
-                    {
-                        array[i, j] = Convert.ToString(j + array.GetLength(0) * i);
-                        Console.Write($"[{array[i, j]}]\t");
-                    }
-
-                    
-                }
-                Console.WriteLine(CalculatingDistance(array, 3, 0, 8));
+                ComputerSuperPower();
             }
-
-
-
         }
 
         static void Multiplayer(int size)
@@ -254,7 +427,8 @@ namespace TAsk2_2
 
             while (true)
             {
-                Turn("X", array, size);
+                Turn("X", array, out int _, size, out int _, out int _);
+                //(string player, string[,] array, out int cell, int size, out int row, out int col)
                 if (IsWin(array, "X"))
                 {
                     Console.WriteLine("X won!");
@@ -267,7 +441,7 @@ namespace TAsk2_2
                     return;
                 }
 
-                Turn("O", array, size);
+                Turn("O", array, out _, size, out _, out _);
                 if (IsWin(array, "O"))
                 {
                     Console.WriteLine("O won!");
@@ -299,7 +473,7 @@ namespace TAsk2_2
             int step = 0;
             while (true)
             {
-                Turn("X", array, size);
+                Turn("X", array, out _, size, out _, out _);
                 step++;
                 if (IsWin(array, "X"))
                 {
@@ -313,13 +487,12 @@ namespace TAsk2_2
                     return;
                 }
 
-                Turn("O", array, size);
+                Turn("O", array, out _, size, out _, out _);
                 if (IsWin(array, "O"))
                 {
                     Console.WriteLine("O won!");
                     return;
                 }
-
             }
         }
     }
