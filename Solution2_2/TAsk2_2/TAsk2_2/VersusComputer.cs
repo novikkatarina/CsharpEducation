@@ -6,12 +6,13 @@ namespace TAsk2_2
     public class VersusComputer
     {
         public Board board;
+
         public VersusComputer()
         {
             board = new Board(3);
         }
-        
-        public void PrintPause() // печать задержки
+
+        public void PrintPause()
         {
             Thread.Sleep(500);
             Console.Write(".");
@@ -20,34 +21,36 @@ namespace TAsk2_2
             Thread.Sleep(500);
             Console.WriteLine(".");
         }
-        
+
         public void ComputerSuperPower()
         {
             const string computer = "X";
             const string player = "O";
 
-            //First step in the center (cell = 4)
+            //First step for computer - in the center (cell = 4)
             Logic.CalculatingCell(4, 3, out int computerCellRow, out int computerCellCol);
             PrintPause();
-        
+
             Console.WriteLine("Computer chose 4");
-            board.SetSymbol(computerCellRow, computerCellCol, "X");
+            board.SetSymbol(computerCellRow, computerCellCol, computer);
             board.Print();
-        
-            Logic.Turn("O", board.Array, out int userCell, 3, out int row, out int col);
+
+            //PLayer step
+            Logic.Turn(player, board.Array, out int userCell, 3, out int row, out int col);
             board.Print();
-            
-            //Second step as far as it's possible from O's second step
+
+            //Second step of computer - as far as it's possible from O's second step
             double maxDistance = -1;
             int farCell = 0;
-        
+
+            //If previous player's step was in the center steps (1, 3, 5, 7) - calculating the most far cell
             if ((userCell == 1) || (userCell == 3) || (userCell == 5) || (userCell == 7))
             {
                 for (int i = 0; i < 3; i++)
                 {
                     for (int j = 0; j < 3; j++)
                     {
-                        if (board.Array[i, j] != "X" && board.Array[i, j] != "O")
+                        if (board.Array[i, j] != computer && board.Array[i, j] != player)
                         {
                             int cell = i * board.GetSize() + j;
                             double distance = Logic.CalculatingDistance(cell, userCell);
@@ -59,17 +62,17 @@ namespace TAsk2_2
                         }
                     }
                 }
-        
                 row = farCell / board.GetSize();
                 col = farCell % board.GetSize();
-        
-                board.SetSymbol(row, col, "X");
+
+                board.SetSymbol(row, col, computer);
             }
-        
+
+            // Else make step in the corner
             else
             {
-                int cellAttempt = 0;
-        
+                int cellAttempt = -2;
+
                 do
                 {
                     cellAttempt += 2;
@@ -77,16 +80,18 @@ namespace TAsk2_2
                     col = cellAttempt % 3;
                 } while (board.Array[row, col] == computer || board.Array[row, col] == player);
             }
-        
-            board.SetSymbol(row, col, "X");
-        
+
+            board.SetSymbol(row, col, computer);
+
             PrintPause();
-        
+
             board.Print();
-        
-            Logic.Turn("O", board.Array, out userCell, 3, out row, out col);
+            
+            //Next step for player
+
+            Logic.Turn(player, board.Array, out userCell, 3, out row, out col);
             board.Print();
-        
+
             while (true)
             {
                 TurnComputer(board.Array, computer, player);
@@ -95,13 +100,13 @@ namespace TAsk2_2
                     Console.WriteLine("X won!");
                     return;
                 }
-        
+
                 if (Logic.IsDraw(board.Array)) //turn off this loop in case of field size > 3
                 {
                     Console.WriteLine("It's a tie!");
                     return;
                 }
-        
+
                 Logic.Turn("O", board.Array, out userCell, 3, out row, out col);
                 board.Print();
                 if (Logic.IsWin(board.Array, "O"))
@@ -109,7 +114,7 @@ namespace TAsk2_2
                     Console.WriteLine("O won!");
                     return;
                 }
-        
+
                 if (Logic.IsDraw(board.Array)) //turn off this loop in case of field size > 3
                 {
                     Console.WriteLine("It's a tie!");
@@ -117,28 +122,28 @@ namespace TAsk2_2
                 }
             }
         }
-        
+
         public void TurnComputer(string[,] array, string computer, string player)
         {
-            //Случай 1. Проверяем, можем ли мы победить следующим ходом.
-        
+            //Case 1. Checking if computer can win.
+
             if (Logic.WinThisTurnComputer(array, player, computer))
             {
                 PrintPause();
                 board.Print();
                 return;
             }
-        
-            // Проверяем, может ли противник победить следующим ходом, и блокируем его ход.
+
+            // Case 2. Checking if player can win and stop him.
             if (Logic.WinThisTurnPlayer(array, player, computer))
             {
                 PrintPause();
                 board.Print();
                 return;
             }
-        
-            //Если оба варианта не подходят, ходим рандомно
-            
+
+            //Case 3. Else make random step.
+
             Random random = new Random();
             int computerCol;
             int computerRow;
@@ -148,9 +153,9 @@ namespace TAsk2_2
                 computerRow = randomCell / 3;
                 computerCol = randomCell % 3; //calculating the exact row and colom by user's input cell
             } while (array[computerRow, computerCol] == computer ||
-                     array[computerRow, computerCol] == player /*|| !IsDraw(array)*/);
-        
-            array[computerRow, computerCol] = "X";
+                     array[computerRow, computerCol] == player);
+
+            array[computerRow, computerCol] = computer;
             PrintPause();
             board.Print();
         }

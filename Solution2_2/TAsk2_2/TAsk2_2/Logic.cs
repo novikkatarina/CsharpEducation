@@ -31,8 +31,6 @@ namespace TAsk2_2
                     }
         
                     array[row, col] = player;
-        
-                    // board.Print();
                     retryFlag = true;
                 }
                 catch (Exception e)
@@ -140,7 +138,7 @@ namespace TAsk2_2
         }
         
         public static bool WinThisTurnComputer(string[,] array, string player,
-            string computer) //проверяем возможность выиграть в этот ход
+            string computer) //Checking if computer can win.
         {
             int bestY = -1;
             int bestX = -1;
@@ -162,13 +160,9 @@ namespace TAsk2_2
                     }
                 }
             }
-
-            // Ecли игрок может победить
             if (bestX != -1 && bestY != -1)
             {
                 array[bestX, bestY] = computer;
-                //PrintPause();
-                //Print(array);
                 return true;
             }
 
@@ -176,7 +170,7 @@ namespace TAsk2_2
         }
 
         public static bool WinThisTurnPlayer(string[,] array, string playerChekingWin,
-            string computer) //проверяем возможность игрока выиграть в этот ход
+            string computer) //Checking if player can win.
         {
             int bestY = -1;
             int bestX = -1;
@@ -198,13 +192,9 @@ namespace TAsk2_2
                     }
                 }
             }
-
-            // Ecли игрок может победить
             if (bestX != -1 && bestY != -1)
             {
                 array[bestX, bestY] = computer;
-                // PrintPause();
-                // Print(array);
                 return true;
             }
 
