@@ -1,4 +1,3 @@
-using System.Formats.Tar;
 using Newtonsoft.Json;
 
 namespace Phonebook;
@@ -6,152 +5,196 @@ namespace Phonebook;
 public class MyPhonebook
 {
     private static MyPhonebook _myPhonebook;
-    string path = "/Users/user/Katarina/Digit/CsharpEducation/Phonebook/Phonebook/phonebook.txt";
-    public List<Subscriber> List{ set; get; }
+    readonly string _path = "/Users/user/Katarina/Digit/CsharpEducation/Phonebook/Phonebook/phonebook.txt";
+    public List<Subscriber> List { set; get; }
+
+    /// <summary>
+    /// Constructor
+    /// </summary>
     private MyPhonebook()
     {
         List = new List<Subscriber>();
     }
-    
+
+    /// <summary>
+    /// Return single instance of MyPhonebook.
+    /// </summary>
+    /// <returns></returns>
     public static MyPhonebook Instance()
     {
         if (_myPhonebook == null)
-        _myPhonebook = new MyPhonebook();
-        
+            _myPhonebook = new MyPhonebook();
+
         return _myPhonebook;
     }
-
-    public void Print(List<Subscriber> List)
+    
+    /// <summary>
+    /// Prints all subscribers.
+    /// </summary>
+    public void Print()
     {
-        foreach (Subscriber item in List)
+        List.ForEach(item => Console.WriteLine("Name: {0}  Number: {1}", item.Name, item.Number));
+    }
+    
+    /// <summary>
+    /// Prints given list of subscribers.
+    /// </summary>
+    /// <param name="list">list of subscribers</param>
+    public void Print(List<Subscriber> list)
+    {
+        foreach (Subscriber item in list)
         {
-            Console.WriteLine(item.Name + item.Phone);
+            Console.WriteLine("Name: {0}  Number: {1}", item.Name, item.Number);
         }
     }
-    
-    static void Create(Subscriber subscriber, string path)
+
+    /// <summary>
+    /// Creates new subscriber.
+    /// </summary>
+    /// <param name="name">name</param>
+    /// <param name="number">number</param>
+    public void Create(string name, string number)
     {
-        List<Subscriber> allSubscribers = ReadAll();
-        allSubscribers.Add(subscriber);
-        string serializedSubscribers = JsonConvert.SerializeObject(allSubscribers);
-        File.WriteAllText(path, serializedSubscribers);
+        List = ReadAll();
+        Subscriber subscriber = new Subscriber(name, number);
+        int index = List.FindIndex(s => s.Name == subscriber.Name);
+        if (index != -1)
+        {
+            Console.WriteLine("Subscriber already exists");
+            return;
+        }
+
+        List.Add(subscriber);
+        string serializedSubscribers = JsonConvert.SerializeObject(List, Formatting.Indented);
+        File.WriteAllText(_path, serializedSubscribers);
+
+        Console.WriteLine("Subscriber added");
+        Print();
     }
-    
-    static List<Subscriber> ReadAll()
+
+    /// <summary>
+    /// Read all subscribers from file.
+    /// </summary>
+    /// <returns></returns>
+    public List<Subscriber> ReadAll()
     {
-        string book = File.ReadAllText(path);
-        //string json = "{ \"name\": \"Man\", \"Phone\": \"29\" }";
-        List<Subscriber> subscriber = JsonConvert.DeserializeObject<List<Subscriber>>(book);
-
-
-        Console.WriteLine($"Name: {subscriber.ame}, Number: {subscriber.Phone}");
-
-        // string book = File.ReadAllText(path);
-        // List<Subscriber> subscribers = JsonConvert.DeserializeObject<List<Subscriber>>(book);
-        // return subscribers;
+        string book = File.ReadAllText(_path);
+        List = JsonConvert.DeserializeObject<List<Subscriber>>(book);
+        return List;
     }
-    
-    // public void Create(Subscriber subscriber)
-    // {
-    //     int index = List.FindIndex(s => s.Name == subscriber.Name);
-    //     if (index != -1)
-    //     {
-    //         Console.WriteLine("Пользователь уже существует");
-    //         return;
-    //     }
-    //     
-    //     List.Add(subscriber);
-    //     Console.WriteLine("Пользователь добавлен");
-    // }
 
-    public void ReadByName(string Name)
+
+    /// <summary>
+    /// Search subscriber by name.
+    /// </summary>
+    /// <param name="name">name to look for</param>
+    public void ReadByName(string name)
     {
-        List<Subscriber> RequestedList = new List<Subscriber>();
+        List<Subscriber> subscribersFound = new List<Subscriber>();
         foreach (Subscriber subscriber in List)
         {
-            if (subscriber.Name == Name)  {
-                RequestedList.Add(subscriber);
-                Print(RequestedList);
-                return;
+            if (subscriber.Name == name)
+            {
+                subscribersFound.Add(subscriber);
             }
         }
 
-        Console.WriteLine("Пользователей не найдено");
-       
+        if (subscribersFound.Count > 0)
+        {
+            Print(subscribersFound);
+            return;
+        }
+
+        Console.WriteLine("There is no such subscribers");
     }
-    
+
+    /// <summary>
+    /// Searches subscriber by number.
+    /// </summary>
+    /// <param name="number">number to look for</param>
     public void ReadByNumber(string number)
     {
-        List<Subscriber> RequestedList = new List<Subscriber>();
+        List<Subscriber> subscribersFound = new List<Subscriber>();
         foreach (Subscriber subscriber in List)
         {
-            if (subscriber.Phone == number)
+            if (subscriber.Number == number)
             {
-                RequestedList.Add(subscriber);
-                Print(RequestedList);
-                return;
+                subscribersFound.Add(subscriber);
             }
         }
 
-        Console.WriteLine("Пользователей не найдено");
+        if (subscribersFound.Count > 0)
+        {
+            Print(subscribersFound);
+            return;
+        }
 
-        
+        Console.WriteLine("There is no such subscribers");
     }
-
+    
+    /// <summary>
+    /// Updates subscriber by name.
+    /// </summary>
+    /// <param name="name">old name</param>
+    /// <param name="newname">new name</param>
     public void UpdateName(string name, string newname)
     {
         int index = List.FindIndex(s => s.Name == name);
-
         if (index != -1)
         {
             List[index].Name = newname;
-            Console.WriteLine("Изменения проведены успешно");
+            string serializedSubscribers = JsonConvert.SerializeObject(List, Formatting.Indented);
+            File.WriteAllText(_path, serializedSubscribers);
+            Console.WriteLine("Changed Successfully");
+            Console.WriteLine("Name {0}, Number {1}", List[index].Name, List[index].Number);
         }
         else
         {
-            Console.WriteLine("Нет таких абонентов");
+            Console.WriteLine("There is no such subscribers");
         }
     }
-    
-    public void UpdatePhone(string name, string number)
-    {
-        int index = List.FindIndex(s => s.Name == name);
 
+    /// <summary>
+    /// Updates subscriber by phone number.
+    /// </summary>
+    /// <param name="number">old phone number</param>
+    /// <param name="newnumber">new phone number</param>
+    public void UpdatePhone(string number, string newnumber)
+    {
+        int index = List.FindIndex(s => s.Number == number);
         if (index != -1)
         {
-            List[index].Phone = number;
-            Console.WriteLine("Изменения проведены успешно");
+            List[index].Number = newnumber;
+            string serializedSubscribers = JsonConvert.SerializeObject(List, Formatting.Indented);
+            File.WriteAllText(_path, serializedSubscribers);
+            Console.WriteLine("Changed Successfully");
+            Console.WriteLine("Name {0}, Number {1}", List[index].Name, List[index].Number);
         }
         else
         {
-            Console.WriteLine("Нет таких абонентов");
+            Console.WriteLine("There is no such subscribers");
         }
     }
 
+    /// <summary>
+    /// Deletes subscriber.
+    /// </summary>
+    /// <param name="name">name</param>
     public void Delete(string name)
     {
         int index = List.FindIndex(s => s.Name == name);
-        
+
         if (index != -1)
-        {List.RemoveAt(index);
-            Console.WriteLine("Изменения проведены успешно");
+        {
+            List.RemoveAt(index);
+            string serializedSubscribers = JsonConvert.SerializeObject(List, Formatting.Indented);
+            File.WriteAllText(_path, serializedSubscribers);
+            Console.WriteLine("Changed Successfully");
+            Print();
         }
         else
         {
-            Console.WriteLine("Нет таких абонентов");
+            Console.WriteLine("There is no such subscribers");
         }
     }
-
-    // Должна быть реализована CRUD функциональность:
-        
-        // ----Должен уметь принимать от пользователя номер и имя телефона.
-        // Сохранять номер в файле phonebook.txt. (При завершении программы либо при добавлении).
-        // Вычитывать из файла сохранённые номера. (При старте программы).
-        // ----Удалять номера.
-        // ----Получать абонента по номеру телефона.
-        // ----Получать номер телефона по имени абонента.
-        //  ---Обращение к Phonebook должно быть как к классу-одиночке.
-        // ----Внутри должна быть коллекция с абонентами.
-        // ----Для обращения с абонентами нужно завести класс Abonent. С полями «номер телефона», «имя».
-        // ----Не дать заносить уже записанного абонента.
 }

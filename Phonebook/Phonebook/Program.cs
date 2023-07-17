@@ -1,99 +1,69 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using System.ComponentModel;
-using System.Net;
-using System.Threading.Channels;
-using System.Xml.Schema;
-using Newtonsoft.Json;
-using Phonebook;
-using System;
-
+namespace Phonebook;
 
 internal class Program
 {
-    static void Main(string[] args)
+    static void Main()
     {
         var ph = MyPhonebook.Instance();
-        List<Subscriber> ss = new List<Subscriber>();
         string input;
         int intInput;
-        do
+        ph.ReadAll();
+        while (true)
         {
-            Console.WriteLine("1-create, 2- find, 3 - modify, 4 - delete");
-            input = Console.ReadLine();
-        } while (!int.TryParse(input, out intInput));
+            do
+            {
+                Console.WriteLine(
+                    "1-create, 2- find by name, 3- find by number, \n4 - modify by name, 5 - modify by number, 6 - delete, 7 - print, 8- exit");
+                input = Console.ReadLine();
+            } while (!int.TryParse(input, out intInput));
 
-        switch (intInput)
-        {
-            case 1:
-                ReadAll(path);
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            case 4:
-                break;
+            switch (intInput)
+            {
+                case 1:
+                    Console.WriteLine("Enter name");
+                    string name = Console.ReadLine();
+                    Console.WriteLine("Enter number");
+                    string number = Console.ReadLine();
+                    ph.Create(name, number);
+                    break;
+                case 2:
+                    Console.WriteLine("Enter name");
+                    input = Console.ReadLine();
+                    ph.ReadByName(input);
+                    break;
+                case 3:
+                    Console.WriteLine("Enter number");
+                    input = Console.ReadLine();
+                    ph.ReadByNumber(input);
+                    break;
+                case 4:
+                    Console.WriteLine("Enter current name");
+                    string inputCurrentName = Console.ReadLine();
+                    Console.WriteLine("Enter new name");
+                    string inputNewName = Console.ReadLine();
+                    ph.UpdateName(inputCurrentName, inputNewName);
+                    break;
+                case 5:
+                    Console.WriteLine("Enter current number");
+                    string inputCurrentNumber = Console.ReadLine();
+                    Console.WriteLine("Enter new number");
+                    string inputNewNumber = Console.ReadLine();
+                    ph.UpdatePhone(inputCurrentNumber, inputNewNumber);
+                    break;
+                case 6:
+                    Console.WriteLine("Enter subscriber's name to delete");
+                    input = Console.ReadLine();
+                    ph.Delete(input);
+                    break;
+                case 7:
+                    ph.Print();
+                    break;
+                case 8:
+                    return;
+            }
         }
 
-        ph.Print(ss);
     }
-
-
-// var ph = MyPhonebook.Instance();
-
-// string text = "Hello World\nHello METANIT.COM";
-// // Вычитывать из файла сохранённые номера. (При старте программы).
-// StreamWriter writer = new StreamWriter(path, true) ;
-//     writer.Write("ushaxi");
-
-    // static List<Subscriber> Delete(Subscriber subscriber)
-    //  {
-    //      
-    //  }
-
-    static void UpdatePhone(string name, string number)
-    {
-    }
-
-
-    // static List<Subscriber> ReadByName(Subscriber subscriber)
-    // {
-    //     return list<Subscriber>;
-    // }
 }
-
-
-// {
-//     await writer.WriteLineAsync("Addition");
-//     await writer.WriteAsync("4,5");
-// }
-//
-// Console.WriteLine("1-create, 2- find, 3 - modify, 4 - delete");
-//
-// Subscriber ss = new Subscriber("Ivan", "20");
-// ph.Create(ss);
-// Subscriber sss = new Subscriber("Ivan2", "21");
-// ph.Create(sss);
-// // ph.Create("Ivan", "21");
-// // ph.Create("Ivan2", "22");
-//
-// ph.Print(ph.List);
-//
-// ph.ReadByName("Ivan");
-// ph.ReadByNumber("22");
-//
-// ph.UpdateName("Ivan", "Ivan3");
-// Console.WriteLine("update");
-// ph.Print(ph.List);
-//
-// ph.Delete("Ivan");
-//
-// ph.Print(ph.List);
-//
-//
-//
-// // ph.Create(new Subscriber("vasya", "123"));
-// //
-// // // option 2
-// // MyPhonebook.Instance().Create(new Subscriber("vasya", "123"));

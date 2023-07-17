@@ -2,18 +2,19 @@ namespace Phonebook;
 
 public class Subscriber
 {
+    // public static string name;
     public string Name { set; get; }
-    public string Phone { set; get; }
+    public string Number { set; get; }
 
-    public Subscriber(string name, string phone)
+    public Subscriber(string name, string number)
     {
         Name = name;
-        Phone = phone;
+        Number = number;
     }
 
     public override string ToString()
     {
-        string str = $"{Name} {Phone}";
+        string str = $"{Name} {Number}";
         return str;
     }
 }
