@@ -16,7 +16,7 @@ namespace ClassLibrary1
 
             public void GetInfo()
             {
-                Console.WriteLine(name + " " + age);
+                Console.WriteLine($"{name} {age}");
             }
         }
     }

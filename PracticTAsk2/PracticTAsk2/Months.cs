@@ -25,7 +25,10 @@ namespace PracticTAsk2
     {
         public static int Days(Month month)
         {
-            if (Enum.IsDefined(typeof(Month), month)) return (int)month;
+            if (Enum.IsDefined(typeof(Month), month))
+            {
+                return (int)month;
+            }
             else
             {
                 return 0;
