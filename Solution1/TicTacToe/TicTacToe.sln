@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicTacToe.GUI", "TicTacToe.GUI\TicTacToe.GUI.csproj", "{8C3AC822-9F91-4DD0-995D-459F352D53C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicTacToe.Console", "TicTacToe.Console\TicTacToe.Console.csproj", "{2AC855B8-E426-4D92-A81A-AD89ADA85BE1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicTacToe.ConsoleApp", "TicTacToe.ConsoleApp\TicTacToe.ConsoleApp.csproj", "{2AC855B8-E426-4D92-A81A-AD89ADA85BE1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
