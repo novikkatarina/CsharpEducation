@@ -98,13 +98,33 @@ public partial class MainPage : ContentPage
             // Это автоматически обновит текст в Label
             viewModel.MyText = $"Игра окончена, {player} выиграл";
             viewModel.MyText2 = $" ";
+            DisableAllButtons();
+            return;
         };
+
         if (isDraw)
         {
             // Это автоматически обновит текст в Label
             viewModel.MyText = "Ничья";
             viewModel.MyText2 = $" ";
+            DisableAllButtons();
         };
+
+    }
+
+    private void DisableAllButtons() {
+        Button00.IsEnabled = false;
+        Button01.IsEnabled = false;
+        Button02.IsEnabled = false;
+
+        Button10.IsEnabled = false;
+        Button11.IsEnabled = false;
+        Button12.IsEnabled = false;
+
+        Button20.IsEnabled = false;
+        Button21.IsEnabled = false;
+        Button22.IsEnabled = false;
+
 
     }
 
