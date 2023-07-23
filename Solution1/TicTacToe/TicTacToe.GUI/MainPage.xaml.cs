@@ -1,187 +1,203 @@
-﻿
-using System.ComponentModel;
+﻿namespace TicTacToe.GUI;
 
-namespace TicTacToe;
-
+/// <summary>
+/// Класс описывает логику основной страницы игры.
+/// </summary>
 public partial class MainPage : ContentPage
 {
-    const string player1 = "X";
-    const string player2 = "O";
+  const string player1 = "X";
+  const string player2 = "O";
 
-    private bool isPlayer1Turn = true;
-    private MyViewModel viewModel;
+  private bool isPlayer1Turn = true;
+  private int count = 0;
+  string[,] board;
+  private MyViewModel viewModel;
 
+  /// <summary>
+  /// Конструктор.
+  /// </summary>
+  public MainPage()
+  {
+    #region
 
-    int count = 0;
-    Board board;
+    InitializeComponent();
 
-    public MainPage()
+    #endregion
+
+    InitializeBoard();
+
+    viewModel = new MyViewModel();
+    BindingContext = viewModel;
+  }
+
+  /// <summary>
+  /// Иницилизирует поле.
+  /// </summary>
+  private void InitializeBoard()
+  {
+    board = new string[3, 3];
+
+    // set text on buttons
+    Button00.Text = board[0, 0];
+    Button01.Text = board[0, 1];
+    Button02.Text = board[0, 2];
+
+    Button10.Text = board[1, 0];
+    Button11.Text = board[1, 1];
+    Button12.Text = board[1, 2];
+
+    Button20.Text = board[2, 0];
+    Button21.Text = board[2, 1];
+    Button22.Text = board[2, 2];
+  }
+
+  /// <summary>
+  /// Проверяет выигрыш или ничья.
+  /// </summary>
+  /// <param name="player"></param>
+  private void CheckWinOrDraw(string player)
+  {
+    bool isWin = Logic.IsWin(board, player);
+    bool isDraw = Logic.IsDraw(board);
+
+    if (isWin)
     {
-        #region DoNotChange
-        InitializeComponent();
-        #endregion
-
-        InitializeBoard();
-
-        viewModel = new MyViewModel();
-
-        this.BindingContext = viewModel;
-
+      // Это автоматически обновит текст в Label
+      viewModel.MyText = $"Игра окончена, {player} выиграл";
+      viewModel.MyText2 = $" ";
+      DisableAllButtons();
+      return;
     }
 
-    private void InitializeBoard()
+    if (isDraw)
     {
-        board = new Board(3);
+      // Это автоматически обновит текст в Label
+      viewModel.MyText = "Ничья";
+      viewModel.MyText2 = $" ";
+      DisableAllButtons();
+    }
+  }
 
-        // set text on buttons
-        Button00.Text = board.Array[0, 0];
-        Button01.Text = board.Array[0, 1];
-        Button02.Text = board.Array[0, 2];
+  /// <summary>
+  /// Отключает все кнопки.
+  /// </summary>
+  private void DisableAllButtons()
+  {
+    Button00.IsEnabled = false;
+    Button01.IsEnabled = false;
+    Button02.IsEnabled = false;
 
-        Button10.Text = board.Array[1, 0];
-        Button11.Text = board.Array[1, 1];
-        Button12.Text = board.Array[1, 2];
+    Button10.IsEnabled = false;
+    Button11.IsEnabled = false;
+    Button12.IsEnabled = false;
 
-        Button20.Text = board.Array[2, 0];
-        Button21.Text = board.Array[2, 1];
-        Button22.Text = board.Array[2, 2];
+    Button20.IsEnabled = false;
+    Button21.IsEnabled = false;
+    Button22.IsEnabled = false;
+  }
+
+  /// <summary>
+  /// Описывает ход игрока.
+  /// </summary>
+  /// <param name="button">Кнопка на которую нажали.</param>
+  /// <param name="row">Строка.</param>
+  /// <param name="col">Колонка.</param>
+  private void TurnPlayer(Button button, int row, int col)
+  {
+    string player;
+
+    if (isPlayer1Turn)
+    {
+      player = player1;
+      isPlayer1Turn = false;
+
+      viewModel.MyText2 = "Ходит O";
+    }
+    else
+    {
+      player = player2;
+      isPlayer1Turn = true;
+
+      viewModel.MyText2 = "Ходит X";
     }
 
-
-    public class MyViewModel : INotifyPropertyChanged
-    {
-        public string _myText = "PLAY!";
-        public string MyText
-        {
-            get { return _myText; }
-            set
-            {
-                if (_myText != value)
-                {
-                    _myText = value;
-                    OnPropertyChanged(nameof(MyText));
-                }
-            }
-        }
-
-        public string _myText2 = "Ходит X";
-        public string MyText2
-        {
-            get { return _myText2; }
-            set
-            {
-                if (_myText2 != value)
-                {
-                    _myText2 = value;
-                    OnPropertyChanged(nameof(MyText2));
-                }
-            }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-    }
-
-    private void Blocking(string player)
-    {
-
-        bool isWin = Logic.IsWin(board.Array, player);
-        bool isDraw = Logic.IsDraw(board.Array);
+    button.Text = player;
+    button.IsEnabled = false;
+    
+    board[row, col] = player;
+    CheckWinOrDraw(player);
+  }
 
 
-        if (isWin)
-        {
-            // Это автоматически обновит текст в Label
-            viewModel.MyText = $"Игра окончена, {player} выиграл";
-            viewModel.MyText2 = $" ";
-        };
-        if (isDraw)
-        {
-            // Это автоматически обновит текст в Label
-            viewModel.MyText = "Ничья";
-            viewModel.MyText2 = $" ";
-        };
+  /// <summary>
+  /// Обработчик нажатия на кнопку 0 0.
+  /// </summary>
+  private void OnButton00Clicked(object sender, EventArgs e)
+  {
+    TurnPlayer(Button00, 0, 0);
+  }
 
-    }
+  /// <summary>
+  /// Обработчик нажатия на кнопку 0 1.
+  /// </summary>
+  private void OnButton01Clicked(object sender, EventArgs e)
+  {
+    TurnPlayer(Button01, 0, 1);
+  }
 
-    private void PLayerTurn(Button ButtonClick, int row, int col)
-    {
+  /// <summary>
+  /// Обработчик нажатия на кнопку 0 2.
+  /// </summary>
+  private void OnButton02Clicked(object sender, EventArgs e)
+  {
+    TurnPlayer(Button02, 0, 2);
+  }
 
-        string player;
+  /// <summary>
+  /// Обработчик нажатия на кнопку 1 0.
+  /// </summary>
+  private void OnButton10Clicked(object sender, EventArgs e)
+  {
+    TurnPlayer(Button10, 1, 0);
+  }
 
-        if (isPlayer1Turn)
-        {
-            player = player1;
-            isPlayer1Turn = false;
+  /// <summary>
+  /// Обработчик нажатия на кнопку 1 1.
+  /// </summary>
+  private void OnButton11Clicked(object sender, EventArgs e)
+  {
+    TurnPlayer(Button11, 1, 1);
+  }
 
-            viewModel.MyText2 = $"Ходит O";
-        }
-        else
-        {
-            player = player2;
-            isPlayer1Turn = true;
+  /// <summary>
+  /// Обработчик нажатия на кнопку 1 2.
+  /// </summary>
+  private void OnButton12Clicked(object sender, EventArgs e)
+  {
+    TurnPlayer(Button12, 1, 2);
+  }
 
-            viewModel.MyText2 = $"Ходит X";
-        }
+  /// <summary>
+  /// Обработчик нажатия на кнопку 2 0.
+  /// </summary>
+  private void OnButton20Clicked(object sender, EventArgs e)
+  {
+    TurnPlayer(Button20, 2, 0);
+  }
 
-        ButtonClick.Text = player;
+  /// <summary>
+  /// Обработчик нажатия на кнопку 2 1.
+  /// </summary>
+  private void OnButton21Clicked(object sender, EventArgs e)
+  {
+    TurnPlayer(Button21, 2, 1);
+  }
 
-        ButtonClick.IsEnabled = false;
-        board.Array[row, col] = player;
-        Blocking(player);
-    }
-
-
-    private void OnButton00Clicked(object sender, EventArgs e)
-    {
-        PLayerTurn(Button00, 0, 0);
-    }
-
-    private void OnButton01Clicked(object sender, EventArgs e)
-    {
-        PLayerTurn(Button01, 0, 1);
-    }
-
-    private void OnButton02Clicked(object sender, EventArgs e)
-    {
-        PLayerTurn(Button02, 0, 2);
-    }
-
-    private void OnButton10Clicked(object sender, EventArgs e)
-    {
-        PLayerTurn(Button10, 1, 0);
-    }
-
-    private void OnButton11Clicked(object sender, EventArgs e)
-    {
-        PLayerTurn(Button11, 1, 1);
-    }
-
-    private void OnButton12Clicked(object sender, EventArgs e)
-    {
-        PLayerTurn(Button12, 1, 2);
-    }
-
-    private void OnButton20Clicked(object sender, EventArgs e)
-    {
-        PLayerTurn(Button20, 2, 0);
-    }
-
-    private void OnButton21Clicked(object sender, EventArgs e)
-    {
-        PLayerTurn(Button21, 2, 1);
-    }
-
-    private void OnButton22Clicked(object sender, EventArgs e)
-    {
-        PLayerTurn(Button22, 2, 2);
-    }
-
-
+  /// <summary>
+  /// Обработчик нажатия на кнопку 2 2.
+  /// </summary>
+  private void OnButton22Clicked(object sender, EventArgs e)
+  {
+    TurnPlayer(Button22, 2, 2);
+  }
 }
-
-

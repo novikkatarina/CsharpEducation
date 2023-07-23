@@ -1,7 +1,7 @@
 ﻿using ObjCRuntime;
 using UIKit;
 
-namespace TicTacToe;
+namespace TicTacToe.GUI;
 
 public class Program
 {

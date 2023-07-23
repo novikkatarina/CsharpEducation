@@ -1,6 +1,6 @@
 ﻿using Foundation;
 
-namespace TicTacToe;
+namespace TicTacToe.GUI;
 
 [Register("AppDelegate")]
 public class AppDelegate : MauiUIApplicationDelegate
