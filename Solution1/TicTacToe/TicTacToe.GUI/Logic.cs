@@ -1,4 +1,4 @@
-namespace TicTacToe
+namespace TicTacToe.GUI
 {
     public class Logic
     {

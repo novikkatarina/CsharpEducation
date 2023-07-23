@@ -1,4 +1,4 @@
-﻿namespace TicTacToe.ConsoleApp;
+﻿namespace TicTacToe.GUI.ConsoleApp;
 
 internal class Program
 {
@@ -34,7 +34,7 @@ internal class Program
         else
         {
             VersusComputer vs = new VersusComputer();
-            vs.ComputerSuperPower();
+            vs.Play();
         }
     }
 }
