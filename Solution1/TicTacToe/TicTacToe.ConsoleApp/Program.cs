@@ -7,7 +7,7 @@ internal class Program
         int input;
         do
         {
-            Console.WriteLine("Choose , 1 - with your friend, 2 to play with computer");
+            Console.WriteLine("Choose 1 - to play with your friend, 2 to play with computer");
             input = int.Parse(Console.ReadLine());
         } while ((input != 1) && (input != 2));
 

@@ -1,9 +1,9 @@
 namespace TicTacToe.GUI.ConsoleApp;
 
 /// <summary>
-/// Описывает основную логику игры.
+/// Описывает основную логику игры - последовательность хода игроков, рассчет положения ячеек, расстояния между ними, возможность ничьей и выигрыша. 
 /// </summary>
-public class Logic
+public class TicTacToeLogic
 {
   /// <summary>
   /// Описывает ход игрока.
@@ -14,6 +14,8 @@ public class Logic
   /// <param name="size"> Размер массива, определяющий величину поля.</param>
   /// <param name="row"> Строка массива.</param>
   /// <param name="col"> Столбец массива.</param>
+
+  #region Ход игрока
   public static void Turn(string player, string[,] array, out int cell,
     int size, out int row, out int col)
   {
@@ -32,7 +34,7 @@ public class Logic
         cell = int.Parse(input);
 
         row = cell /
-              size; //calculating the exact row and colom by user's input cell
+              size; //calculating the exact row and column by user's input cell
         col = cell % size;
 
         if (array[row, col] == "X" || array[row, col] == "O")
@@ -43,14 +45,15 @@ public class Logic
         array[row, col] = player;
         retryFlag = true;
       }
-      catch (Exception e)
+      catch (Exception)
       {
         retryFlag = false;
       }
     } while (retryFlag == false);
   }
+  #endregion
 
-  #region Функции расчета
+  #region Функции расчета ячейки и дистанции между ячейками
 
   /// <summary>
   /// Расчитывает колонку и строку из номера ячейки который ввел пользователь.
@@ -90,7 +93,7 @@ public class Logic
   #endregion
 
 
-  #region Игровые проверки
+  #region Проверка на ничью
 
   /// <summary>
   /// Проверяет получилась ли ничья на данном ходу.
@@ -117,7 +120,7 @@ public class Logic
                       !IsWinPossible(array[0, 2], array[1, 1], array[2, 0]));
 
     // If no draw condition is found, return false
-    return possibilities.Count(x => x == true) >= 6;
+    return possibilities.Count <= 6;
   }
 
   /// <summary>
@@ -127,6 +130,8 @@ public class Logic
   /// <param name="cell2">2 ячейка.</param>
   /// <param name="cell3">3 ячейка.</param>
   /// <returns>Результат проверки.</returns>
+ 
+  
   public static bool IsWinPossible(string cell1, string cell2, string cell3)
   {
     if (( cell1 == "X" || cell2 == "X" || cell3 == "X" ) &&
@@ -144,6 +149,10 @@ public class Logic
   /// <param name="array">Игровое поле.</param>
   /// <param name="player">Данный игрок.</param>
   /// <returns>Результат проверки.</returns>
+  #endregion
+
+  #region Проверка на выигрыш
+
   public static bool IsWin(string[,] array, string player)
   {
     int flag = 0;
@@ -188,6 +197,7 @@ public class Logic
     if (flag == array.GetLength(1)) return true;
     return false;
   }
+  #endregion
 
   /// <summary>
   /// Проверяет победит ли компьютер на данном ходу.
@@ -196,6 +206,9 @@ public class Logic
   /// <param name="player">Игровой символ игрока.</param>
   /// <param name="computer">Игрвовой символ компьютера.</param>
   /// <returns>Результат проверки.</returns>
+
+  #region Проверка на выигрыш компьютером
+
   public static bool IsComputerWin(string[,] array, string player,
     string computer) //Checking if computer can win.
   {
@@ -228,6 +241,7 @@ public class Logic
 
     return false;
   }
+  #endregion
 
   /// <summary>
   /// Возвращает победит ли игрок на данныом ходу.
@@ -236,6 +250,8 @@ public class Logic
   /// <param name="player">Игровой символ игрока, которого проверяют на победу.</param>
   /// <param name="computer">Игрвойо символ компьютера.</param>
   /// <returns>Результат проверки.</returns>
+
+  #region Проверка на выигрыш игроком
   public static bool IsPlayerWin(string[,] array, string player,
     string computer) //Checking if player can win.
   {

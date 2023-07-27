@@ -1,61 +1,70 @@
 namespace TicTacToe.GUI.ConsoleApp;
 
 /// <summary>
-/// Описывает режим игры с другим игроком.
+/// Описывает режим игры с другим игроком на поле 3х3.
 /// </summary>
 public class Multiplayer
 {
   /// <summary>
-  /// Игровое поле.
+  /// Константа размера поля - 3х3.
   /// </summary>
-  private Board board; // null
+  public const int size = 3;
 
   /// <summary>
-  /// Конструктор.
+  /// Поле игры.
   /// </summary>
-  public Multiplayer()
-  {
-    board = new Board(3);
-  }
+  private Board board;
+
 
   /// <summary>
-  /// Запускает режим игры с другим игроком.
+  /// Описывает порядок ходов игроков.
   /// </summary>
   public void Play()
   {
     board.Print();
     while (true)
     {
-      Logic.Turn("X", board.Array, out int _, board.GetSize(), out int _,
+      TicTacToeLogic.Turn("X", board.Array, out int _, board.GetSize(),
+        out int _,
         out int _);
       board.Print();
 
-      if (Logic.IsWin(board.Array, "X"))
+      if (TicTacToeLogic.IsWin(board.Array, "X"))
       {
         Console.WriteLine("X won!");
         return;
       }
 
-      if (Logic.IsDraw(board.Array))
+      if (TicTacToeLogic.IsDraw(board.Array))
       {
         Console.WriteLine("It's a tie!");
         return;
       }
 
-      Logic.Turn("O", board.Array, out _, board.GetSize(), out _, out _);
+      TicTacToeLogic.Turn("O", board.Array, out _, board.GetSize(), out _,
+        out _);
       board.Print();
-      if (Logic.IsWin(board.Array, "O"))
+      if (TicTacToeLogic.IsWin(board.Array, "O"))
       {
         Console.WriteLine("O won!");
         return;
       }
 
-      if (Logic.IsDraw(board
-            .Array)) //turn off this loop in case of field size > 3
+      if (TicTacToeLogic.IsDraw(board
+            .Array)) //turn off this loop in case of field size > 3, IsDraw method works only for board with size 3.
       {
         Console.WriteLine("It's a tie!");
         return;
       }
     }
+  }
+
+  /// <summary>
+  ///Конструктор класса Multiplayer игры между двумя игроками.
+  /// </summary>
+  /// <param name="size">Размер матрицы.</param>
+  public Multiplayer()
+  {
+    board = new Board(size);
   }
 }

@@ -1,7 +1,7 @@
 namespace TicTacToe.GUI.ConsoleApp;
 
 /// <summary>
-/// Описывает режим игры с другим игроком на большом поле.
+/// Описывает режим игры с другим игроком на поле с размером больше 3.
 /// </summary>
 public class MultiplayerBigField
 {
@@ -10,14 +10,6 @@ public class MultiplayerBigField
   /// </summary>
   private Board board;
 
-  /// <summary>
-  /// Конструктор.
-  /// </summary>
-  /// <param name="size">Размер поля.</param>
-  public MultiplayerBigField(int size)
-  {
-    board = new Board(size);
-  }
 
   /// <summary>
   /// Запускает режим игры с другим игроком.
@@ -28,10 +20,11 @@ public class MultiplayerBigField
     int step = 0;
     while (true)
     {
-      Logic.Turn("X", board.Array, out _, board.GetSize(), out _, out _);
+      TicTacToeLogic.Turn("X", board.Array, out _, board.GetSize(), out _,
+        out _);
       board.Print();
       step++;
-      if (Logic.IsWin(board.Array, "X"))
+      if (TicTacToeLogic.IsWin(board.Array, "X"))
       {
         System.Console.WriteLine("X won!");
         return;
@@ -43,13 +36,23 @@ public class MultiplayerBigField
         return;
       }
 
-      Logic.Turn("O", board.Array, out _, board.GetSize(), out _, out _);
+      TicTacToeLogic.Turn("O", board.Array, out _, board.GetSize(), out _,
+        out _);
       board.Print();
-      if (Logic.IsWin(board.Array, "O"))
+      if (TicTacToeLogic.IsWin(board.Array, "O"))
       {
         System.Console.WriteLine("O won!");
         return;
       }
     }
+  }
+
+  /// <summary>
+  /// Конструктор класса MultiplayerBigField игры между двумя игроками.
+  /// </summary>
+  /// <param name="size">Размер поля.</param>
+  public MultiplayerBigField(int size)
+  {
+    board = new Board(size);
   }
 }
