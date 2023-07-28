@@ -1,14 +1,16 @@
-namespace TicTacToe.GUI.ConsoleApp;
+namespace TicTacToe.ConsoleApp;
 
 /// <summary>
 /// Описывает режим игры с другим игроком на поле 3х3.
 /// </summary>
-public class Multiplayer
+public class GamingWithPlayer : IGamingStrategy
 {
   /// <summary>
   /// Константа размера поля - 3х3.
   /// </summary>
   public const int size = 3;
+
+  public Board Board { get { return board; } }
 
   /// <summary>
   /// Поле игры.
@@ -21,17 +23,19 @@ public class Multiplayer
   /// </summary>
   public void Play()
   {
+    Player currentPlayer = Player.X;
     board.Print();
     while (true)
     {
-      TicTacToeLogic.Turn("X", board.Array, out int _, board.GetSize(),
+      TicTacToeLogic.Turn($"{currentPlayer}", board.Array, out int _,
+        board.GetSize(),
         out int _,
         out int _);
       board.Print();
 
-      if (TicTacToeLogic.IsWin(board.Array, "X"))
+      if (TicTacToeLogic.IsWin(board.Array, $"{currentPlayer}"))
       {
-        Console.WriteLine("X won!");
+        Console.WriteLine($"{currentPlayer} won!");
         return;
       }
 
@@ -41,21 +45,7 @@ public class Multiplayer
         return;
       }
 
-      TicTacToeLogic.Turn("O", board.Array, out _, board.GetSize(), out _,
-        out _);
-      board.Print();
-      if (TicTacToeLogic.IsWin(board.Array, "O"))
-      {
-        Console.WriteLine("O won!");
-        return;
-      }
-
-      if (TicTacToeLogic.IsDraw(board
-            .Array)) //turn off this loop in case of field size > 3, IsDraw method works only for board with size 3.
-      {
-        Console.WriteLine("It's a tie!");
-        return;
-      }
+      currentPlayer = currentPlayer == Player.X ? Player.O : Player.X;
     }
   }
 
@@ -63,7 +53,7 @@ public class Multiplayer
   ///Конструктор класса Multiplayer игры между двумя игроками.
   /// </summary>
   /// <param name="size">Размер матрицы.</param>
-  public Multiplayer()
+  public GamingWithPlayer()
   {
     board = new Board(size);
   }

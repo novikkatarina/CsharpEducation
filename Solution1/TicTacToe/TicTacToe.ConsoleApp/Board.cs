@@ -1,4 +1,4 @@
-namespace TicTacToe.GUI.ConsoleApp;
+namespace TicTacToe.ConsoleApp;
 
 /// <summary>
 /// Создает и печатает матрицу - поле для игры.
@@ -53,12 +53,12 @@ public class Board
     {
       for (int j = 0; j < Array.GetLength(1); j++)
       {
-        if (Array[i, j] == "X")
+        if (Array[i, j] == Player.X.ToString())
         {
           Console.ForegroundColor = ConsoleColor.Red;
         }
 
-        if (Array[i, j] == "O")
+        if (Array[i, j] == Player.O.ToString())
         {
           Console.ForegroundColor = ConsoleColor.Green;
         }

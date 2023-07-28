@@ -1,4 +1,4 @@
-namespace TicTacToe.GUI.ConsoleApp;
+namespace TicTacToe.ConsoleApp;
 
 /// <summary>
 /// Описывает основную логику игры - последовательность хода игроков, рассчет положения ячеек, расстояния между ними, возможность ничьей и выигрыша. 
@@ -16,6 +16,7 @@ public class TicTacToeLogic
   /// <param name="col"> Столбец массива.</param>
 
   #region Ход игрока
+
   public static void Turn(string player, string[,] array, out int cell,
     int size, out int row, out int col)
   {
@@ -37,7 +38,8 @@ public class TicTacToeLogic
               size; //calculating the exact row and column by user's input cell
         col = cell % size;
 
-        if (array[row, col] == "X" || array[row, col] == "O")
+        if (array[row, col] == Player.X.ToString() ||
+            array[row, col] == Player.O.ToString())
         {
           continue;
         }
@@ -51,6 +53,7 @@ public class TicTacToeLogic
       }
     } while (retryFlag == false);
   }
+
   #endregion
 
   #region Функции расчета ячейки и дистанции между ячейками
@@ -130,12 +133,12 @@ public class TicTacToeLogic
   /// <param name="cell2">2 ячейка.</param>
   /// <param name="cell3">3 ячейка.</param>
   /// <returns>Результат проверки.</returns>
- 
-  
   public static bool IsWinPossible(string cell1, string cell2, string cell3)
   {
-    if (( cell1 == "X" || cell2 == "X" || cell3 == "X" ) &&
-        ( cell1 == "O" || cell2 == "O" || cell3 == "O" ))
+    if (( cell1 == Player.X.ToString() || cell2 == Player.X.ToString() ||
+          cell3 == Player.X.ToString() ) &&
+        ( cell1 == Player.O.ToString() || cell2 == Player.O.ToString() ||
+          cell3 == Player.O.ToString() ))
     {
       return false;
     }
@@ -149,6 +152,7 @@ public class TicTacToeLogic
   /// <param name="array">Игровое поле.</param>
   /// <param name="player">Данный игрок.</param>
   /// <returns>Результат проверки.</returns>
+
   #endregion
 
   #region Проверка на выигрыш
@@ -197,6 +201,7 @@ public class TicTacToeLogic
     if (flag == array.GetLength(1)) return true;
     return false;
   }
+
   #endregion
 
   /// <summary>
@@ -241,6 +246,7 @@ public class TicTacToeLogic
 
     return false;
   }
+
   #endregion
 
   /// <summary>
@@ -252,6 +258,7 @@ public class TicTacToeLogic
   /// <returns>Результат проверки.</returns>
 
   #region Проверка на выигрыш игроком
+
   public static bool IsPlayerWin(string[,] array, string player,
     string computer) //Checking if player can win.
   {

@@ -1,26 +1,28 @@
-namespace TicTacToe.GUI.ConsoleApp;
+namespace TicTacToe.ConsoleApp;
 
 /// <summary>
 /// Описывает режим игры против компьютера.
 /// </summary>
-public class VersusComputer
+public class VersusComputer : IGamingStrategy
 {
   /// <summary>
   /// Игровое поле.
   /// </summary>
   private Board board;
 
+  public Board Board { get { return board; } }
+
 
   /// <summary>
   /// Запускает режим игры против компьютера.
   /// </summary>
 
-  #region MyRegion Метод игры компьютера с игроком
+  #region Метод игры компьютера с игроком
 
   public void Play()
   {
-    const string computer = "X";
-    const string player = "O";
+    string computer = Player.X.ToString();
+    string player = Player.O.ToString();
 
     // First step for computer - in the center (cell = 4).
     TicTacToeLogic.CalculateCell(4, 3, out int computerCellRow,
@@ -96,9 +98,9 @@ public class VersusComputer
     while (true)
     {
       TurnComputer(board.Array, computer, player);
-      if (TicTacToeLogic.IsWin(board.Array, "X"))
+      if (TicTacToeLogic.IsWin(board.Array, computer))
       {
-        Console.WriteLine("X won!");
+        Console.WriteLine($"{computer} won!");
         return;
       }
 
@@ -109,9 +111,10 @@ public class VersusComputer
         return;
       }
 
-      TicTacToeLogic.Turn("O", board.Array, out userCell, 3, out row, out col);
+      TicTacToeLogic.Turn(player, board.Array, out userCell, 3, out row,
+        out col);
       board.Print();
-      if (TicTacToeLogic.IsWin(board.Array, "O"))
+      if (TicTacToeLogic.IsWin(board.Array, player))
       {
         Console.WriteLine("O won!");
         return;

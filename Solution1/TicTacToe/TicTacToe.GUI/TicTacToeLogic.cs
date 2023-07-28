@@ -45,8 +45,10 @@ namespace TicTacToe.GUI
     /// <returns>Результат проверки.</returns>
     public static bool IsWinPossible(string cell1, string cell2, string cell3)
     {
-      if (( cell1 == "X" || cell2 == "X" || cell3 == "X" ) &&
-          ( cell1 == "O" || cell2 == "O" || cell3 == "O" ))
+      if (( cell1 == Player.X.ToString() || cell2 == Player.X.ToString() ||
+            cell3 == Player.X.ToString() ) &&
+          ( cell1 == Player.O.ToString() || cell2 == Player.O.ToString() ||
+            cell3 == Player.O.ToString() ))
       {
         return false;
       }
