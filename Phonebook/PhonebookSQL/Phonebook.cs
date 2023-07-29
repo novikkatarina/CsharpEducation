@@ -3,26 +3,19 @@ using Microsoft.EntityFrameworkCore;
 namespace PhonebookSQL;
 
 /// <summary>
-/// 
+/// Создает телефонную книгу, класс синглтон, позволяет создать только один экземпляр.
 /// </summary>
 public class Phonebook
 {
-  private static Phonebook _phonebook;
-  public PhonebookContext db;
+  /// <summary>
+  /// Переменная типа класса для создания единственного экземпляра этого класса.
+  /// </summary>
+  private static Phonebook phonebook;
 
   /// <summary>
-  /// 
+  /// Экземпляр контекста базы данных телефонной книги.
   /// </summary>
-  private Phonebook()
-  {
-    DbContextOptions<PhonebookContext> options =
-      new DbContextOptionsBuilder<PhonebookContext>()
-        .UseNpgsql(
-          "Host=localhost;Database=testdb;Username=postgres;Password=8313")
-        .Options;
-
-    db = new PhonebookContext(options);
-  }
+  private PhonebookContext db;
 
   /// <summary>
   /// Возвращает экземляр Phonebook.
@@ -30,12 +23,14 @@ public class Phonebook
   /// <returns></returns>
   public static Phonebook Instance()
   {
-    if (_phonebook == null)
-      _phonebook = new Phonebook();
+    if (phonebook == null)
+      phonebook = new Phonebook();
 
-    return _phonebook;
+    return phonebook;
   }
 
+
+  #region Чтение, добавление и поиск абонентов
 
   /// <summary>
   /// Читает объекты из бд и выводит в консоль.
@@ -44,17 +39,17 @@ public class Phonebook
   {
     var subscribers = db.Subscribers.ToList();
     Console.WriteLine("Все абоненты: ");
-    foreach (Subscriber s in subscribers)
+    foreach (Subscriber subscriber in subscribers)
     {
-      Console.WriteLine($"{s.Name} - {s.Number}");
+      Console.WriteLine(subscriber.ToString());
     }
   }
 
   /// <summary>
   /// Добавляет абонента в бд.
   /// </summary>
-  /// <param name="name"></param>
-  /// <param name="number"></param>
+  /// <param name="name">Имя.</param>
+  /// <param name="number">Номер.</param>
   public void AddSubscriber(string name, string number)
   {
     try
@@ -64,7 +59,7 @@ public class Phonebook
       db.SaveChanges();
       Console.WriteLine($"Абонент {name} добавлен");
     }
-    catch (Exception ex)
+    catch (Exception)
     {
       Console.WriteLine($"Абонент с номером {number} уже существует");
       // Handle the exception caused by duplicate primary key
@@ -72,65 +67,49 @@ public class Phonebook
   }
 
   /// <summary>
-  /// 
+  /// Ищет абонента по номеру.
   /// </summary>
-  /// <param name="number"></param>
-  public void ReadByNumber(string number)
+  /// <param name="number">Номер.</param>
+  public Subscriber ReadByNumber(string number)
   {
-    try
-    {
-      Subscriber subscriber =
-        db.Subscribers.FirstOrDefault(p => p.Number == number);
-      if (subscriber != null)
-        Console.WriteLine($"{subscriber.Name} {subscriber.Number}");
-      db.SaveChanges();
-    }
-    catch (Exception)
-    {
-      Console.WriteLine("Абонента не существует");
-      // Console.WriteLine(ex.Message);
-      // Handle the exception caused by duplicate primary key
-    }
+    Subscriber subscriber =
+      db.Subscribers.FirstOrDefault(p => p.Number == number);
+    Console.WriteLine(subscriber?.ToString());
+
+    return subscriber;
   }
 
   /// <summary>
-  /// 
+  /// Ищет абонента по имени.
   /// </summary>
-  /// <param name="name"></param>
-  public void ReadByName(string name)
+  /// <param name="name">Имя.</param>
+  public Subscriber ReadByName(string name)
   {
-    try
-    {
-      Subscriber subscriber =
-        db.Subscribers.FirstOrDefault(p => p.Name == name);
-      if (subscriber != null)
-        Console.WriteLine($"{subscriber.Name} {subscriber.Number}");
-      db.SaveChanges();
-    }
-    catch (Exception)
-    {
-      Console.WriteLine("Такого абонента не существует");
-      // Handle the exception caused by duplicate primary key
-    }
+    Subscriber subscriber =
+      db.Subscribers.FirstOrDefault(p => p.Name == name);
+
+    Console.WriteLine(subscriber?.ToString());
+
+    return subscriber;
   }
 
+  #endregion
+
+  #region Изменение записей абонентов
+
   /// <summary>
-  /// 
+  /// Изменяет номер абонента.
   /// </summary>
-  /// <param name="number"></param>
-  /// <param name="newnumber"></param>
+  /// <param name="number">Номер.</param>
+  /// <param name="newnumber">Новый номер.</param>
   public void UpdateNumber(string number, string newnumber)
   {
     try
     {
       Subscriber subscriber =
-        db.Subscribers.FirstOrDefault(p => p.Number == number);
-      if (subscriber != null)
-      {
-        subscriber.Number = newnumber;
-        Console.WriteLine($"Номер абонента {subscriber.Name} обновлен.");
-      }
-
+        db.Subscribers.First(p => p.Number == number);
+      subscriber.Number = newnumber;
+      Console.WriteLine($"Номер абонента {subscriber.Name} обновлен.");
       db.SaveChanges();
     }
     catch (Exception)
@@ -140,52 +119,62 @@ public class Phonebook
   }
 
   /// <summary>
-  /// 
+  /// Изменяет имя абонента.
   /// </summary>
-  /// <param name="name"></param>
-  /// <param name="newname"></param>
+  /// <param name="name">Имя.</param>
+  /// <param name="newname">Новое имя.</param>
   public void UpdateName(string name, string newname)
   {
     try
     {
       Subscriber subscriber =
-        db.Subscribers.FirstOrDefault(p => p.Number == name);
-      if (subscriber != null)
-      {
-        subscriber.Number = newname;
-        Console.WriteLine($"Имя абонента {name} изменено на {newname}");
-      }
-
+        db.Subscribers.First(p => p.Number == name);
+      subscriber.Number = newname;
+      Console.WriteLine($"Имя абонента {name} изменено на {newname}");
       db.SaveChanges();
     }
     catch (Exception)
     {
       Console.WriteLine("Такого абонента не существует");
-      // Handle the exception caused by duplicate primary key
     }
   }
 
   /// <summary>
-  /// 
+  /// Удалить абонента по номеру.
   /// </summary>
-  /// <param name="name"></param>
+  /// <param name="number"></param>
   public void DeleteByNumber(string number)
   {
     try
     {
       Subscriber subscriber =
-        db.Subscribers.FirstOrDefault(p => p.Number == number);
-      if (subscriber != null)
-      {
-        db.Subscribers.Remove(subscriber);
-        Console.WriteLine($"Абонент {subscriber} удален");
-        db.SaveChanges();
-      }
+        db.Subscribers.First(p => p.Number == number);
+      db.Subscribers.Remove(subscriber);
+      Console.WriteLine($"Абонент {subscriber} удален");
+      db.SaveChanges();
     }
     catch (Exception)
     {
       Console.WriteLine($"Абонент с номером {number} не существует");
       // Handle the exception caused by duplicate primary key
     }
+  }
+
+  /// <summary>
+  /// Конструктор для инициализации контекста базы данных.
+  /// Используется паттерн синглтон.
+  /// </summary>
+
+  #endregion
+
+  private Phonebook()
+  {
+    DbContextOptions<PhonebookContext> options =
+      new DbContextOptionsBuilder<PhonebookContext>()
+        .UseNpgsql(
+          "Host=localhost;Database=testdb;Username=postgres;Password=8313")
+        .Options;
+
+    db = new PhonebookContext(options);
   }
 }

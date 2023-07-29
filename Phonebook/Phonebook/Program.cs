@@ -15,7 +15,7 @@ internal class Program
       do
       {
         Console.WriteLine(
-          "1-create, 2- find by name, 3- find by number, \n4 - modify by name, 5 - modify by number, 6 - delete, 7 - print, 8- exit");
+          "1-create, 2- find by name, 3- find by number, 4 - modify by name, 5 - modify by number, 6 - delete, 7 - print, 8- exit");
         input = Console.ReadLine();
       } while (!int.TryParse(input, out intInput));
 

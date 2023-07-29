@@ -1,42 +1,43 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
 
 namespace PhonebookSQL;
 
+/// <summary>
+/// Класс контекста данных.
+/// </summary>
 public class PhonebookContext : DbContext
 {
-  public PhonebookContext(DbContextOptions<PhonebookContext> options)
-    : base(options)
-  {
-  }
-  
-  //CreateDbContext в IDesignTimeDbContextFactory<> автоматически вызывается Entity Framework Core
-  //во время выполнения операций, которые требуют взаимодействия с базой данных в дизайн-времени.
-  public class PhonebookContextFactory : IDesignTimeDbContextFactory<PhonebookContext>
-  {
-    public PhonebookContext CreateDbContext(string[] args)
-    {
-      var optionsBuilder = new DbContextOptionsBuilder<PhonebookContext>();
-      optionsBuilder.UseNpgsql("Host=localhost;Database=testdb;Username=postgres;Password=8313");
-
-      return new PhonebookContext(optionsBuilder.Options);
-    }
-  }
-  
-  // Поле коллекции абонентов типа DbSet.
+  /// <summary>
+  /// Поле коллекции абонентов типа DbSet в БД.
+  /// </summary>
   public DbSet<Subscriber> Subscribers { get; set; } = null!;
-  
+
+  /// <summary>
+  /// Настраивает модель сущностей в БД по первичному ключу - номеру.
+  /// </summary>
+  /// <param name="modelBuilder">Создатель модели для настройки моделей БД.</param>
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
     modelBuilder.Entity<Subscriber>()
       .HasKey(s => s.Number);
   }
-  
+
+  /// <summary>
+  /// Задает опции для подключения к базе данных, где вызывается метод UseNpgsql(), в который передается строка подключения.
+  /// </summary>
+  /// <param name="optionsBuilder"></param>
   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
   {
-    optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=testdb;Username=postgres;Password=8313");
-    //Для установки подключения к базе данных в методе OnConfiguring вызывается метод UseNpgsql(), в который передается строка подключения.
-    
+    optionsBuilder.UseNpgsql(
+      "Host=localhost;Port=5432;Database=testdb;Username=postgres;Password=8313");
   }
 
+  /// <summary>
+  /// Конструктор класса контекста базы данных.
+  /// </summary>
+  /// <param name="options">Опции настройки.</param>
+  public PhonebookContext(DbContextOptions<PhonebookContext> options)
+    : base(options)
+  {
+  }
 }
