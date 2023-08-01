@@ -3,17 +3,19 @@ using Microsoft.EntityFrameworkCore;
 namespace PhonebookSQL;
 
 /// <summary>
-/// Создает телефонную книгу, класс синглтон, позволяет создать только один экземпляр.
+/// Телефонный справочник.
 /// </summary>
 public class Phonebook
 {
-  /// <summary>
-  /// Переменная типа класса для создания единственного экземпляра этого класса.
-  /// </summary>
-  private static Phonebook phonebook;
+  #region Поля и свойства
 
   /// <summary>
-  /// Экземпляр контекста базы данных телефонной книги.
+  /// Экземпляр класса.
+  /// </summary>
+  private static Phonebook instance;
+
+  /// <summary>
+  /// Контекст базы данных телефонной книги.
   /// </summary>
   private PhonebookContext db;
 
@@ -23,14 +25,15 @@ public class Phonebook
   /// <returns></returns>
   public static Phonebook Instance()
   {
-    if (phonebook == null)
-      phonebook = new Phonebook();
+    if (instance == null)
+      instance = new Phonebook();
 
-    return phonebook;
+    return instance;
   }
 
+  #endregion
 
-  #region Чтение, добавление и поиск абонентов
+  #region Методы
 
   /// <summary>
   /// Читает объекты из бд и выводит в консоль.
@@ -92,10 +95,6 @@ public class Phonebook
 
     return subscriber;
   }
-
-  #endregion
-
-  #region Изменение записей абонентов
 
   /// <summary>
   /// Изменяет номер абонента.
@@ -160,13 +159,11 @@ public class Phonebook
     }
   }
 
-  /// <summary>
-  /// Конструктор для инициализации контекста базы данных.
-  /// Используется паттерн синглтон.
-  /// </summary>
-
   #endregion
 
+  /// <summary>
+  /// Экземпляр контекста базы данных.
+  /// </summary>
   private Phonebook()
   {
     DbContextOptions<PhonebookContext> options =

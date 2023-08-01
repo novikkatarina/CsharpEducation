@@ -3,87 +3,112 @@ using Newtonsoft.Json;
 namespace Phonebook;
 
 /// <summary>
-/// Создает телефонную книгу, класс синглтон, позволяет создать только один экземпляр.
+/// Телефонный справочник.
 /// </summary>
 public class MyPhonebook
 {
+  #region Вложенные типы
+  public class SubscriberEventArgs
+  {
+    /// <summary>
+    /// Сообщение.
+    /// </summary>
+    public string Message { get; }
+
+    /// <summary>
+    /// Абонент.
+    /// </summary>
+    public Subscriber Subscriber { get; }
+
+    /// <summary>
+    /// Аргументы события.
+    /// </summary>
+    /// <param name="subscriber"></param>
+    /// <param name="message"></param>
+    public SubscriberEventArgs(Subscriber subscriber, string message)
+    {
+      Message = message;
+      Subscriber = subscriber;
+    }
+  }
+  #endregion
+  
+  #region Поля и свойства
+
   /// <summary>
-  /// Переменная типа класса для создания единственного экземпляра этого класса.
+  /// Экземпляр класса.
   /// </summary>
-  private static MyPhonebook myPhonebook;
+  private static MyPhonebook instance;
 
   /// <summary>
   /// Путь к файлу с абонентами.
   /// </summary>
-  readonly string path =
-    "/Users/user/Katarina/Digit/CsharpEducation/Phonebook/Phonebook/phonebook.txt";
+  public string path =
+    Path.Combine(
+      "/Users/user/Katarina/Digit/CsharpEducation/Phonebook/Phonebook",
+      "phonebook.txt");
 
   /// <summary>
   /// Список абонентов.
   /// </summary>
-  public List<Subscriber> List { set; get; }
+  private List<Subscriber> Subscribers { set; get; }
+
+  #endregion
+
+  #region Методы
 
   /// <summary>
-  /// Возвращает единственный экземпляр класса MyPhonebook.
+  /// Экземпляр класса.
   /// </summary>
-  /// <returns></returns>
+  /// <returns>Экземпляр класса.</returns>
   public static MyPhonebook Instance()
   {
-    if (myPhonebook == null)
-      myPhonebook = new MyPhonebook();
+    if (instance == null)
+      instance = new MyPhonebook();
 
-    return myPhonebook;
+    return instance;
   }
 
-  #region Вывод в консоль
 
   /// <summary>
   /// Распечатывает абонентов списка List этого класса.
   /// </summary>
   public void Print()
   {
-    List.ForEach(item =>
-      Console.WriteLine(item.ToString()));
-  }
-
-  #endregion
-
-  #region Создание и чтение.
-
-  /// <summary>
-  /// Создает ного абонента и распечатывает всех абонентов.
-  /// </summary>
-  /// <param name="name">Имя.</param>
-  /// <param name="number">Номер.</param>
-  public void Create(string name, string number)
-  {
-    List = ReadAll();
-    Subscriber subscriber = new Subscriber(name, number);
-    int index = List.FindIndex(s => s.Name == subscriber.Name);
-    if (index != -1)
-    {
-      Console.WriteLine("Абонент уже существует");
-      return;
-    }
-
-    List.Add(subscriber);
-    string serializedSubscribers =
-      JsonConvert.SerializeObject(List, Formatting.Indented);
-    File.WriteAllText(path, serializedSubscribers);
-
-    Console.WriteLine("Абонент добавлен");
-    Print();
+    Subscribers.ForEach(item =>
+      Console.WriteLine(item));
   }
 
   /// <summary>
   /// Читает всех абонентов из файла.
   /// </summary>
-  /// <returns></returns>
+  /// <returns>Список абонентов.</returns>
   public List<Subscriber> ReadAll()
   {
     string book = File.ReadAllText(path);
-    List = JsonConvert.DeserializeObject<List<Subscriber>>(book);
-    return List;
+    Subscribers = JsonConvert.DeserializeObject<List<Subscriber>>(book);
+    return Subscribers;
+  }
+
+  /// <summary>
+  /// Создает нового абонента.
+  /// </summary>
+  /// <param name="name">Имя.</param>
+  /// <param name="number">Номер.</param>
+  public void Create(string name, string number)
+  {
+    Subscriber subscriber = new Subscriber(name, number);
+    if (Subscribers.Contains(subscriber))
+    {
+      Notify?.Invoke(Message.CreateSub);
+      return;
+    }
+
+    Subscribers.Add(subscriber);
+    string serializedSubscribers =
+      JsonConvert.SerializeObject(Subscribers, Formatting.Indented);
+    File.WriteAllText(path, serializedSubscribers);
+    Notify?.Invoke(Message.CreateSub2);
   }
 
 
@@ -93,8 +118,16 @@ public class MyPhonebook
   /// <param name="name">Имя абонента для поиска. </param>
   public Subscriber ReadByName(string name)
   {
-    Subscriber subscriber = List.FirstOrDefault(x => x.Name == name);
-    Console.WriteLine(subscriber?.ToString());
+    Subscriber subscriber = Subscribers.FirstOrDefault(x => x.Name == name);
+    if (subscriber != null)
+    {
+      string message = string.Format(Message.ReadSub, subscriber);
+      Notify2?.Invoke(subscriber, new SubscriberEventArgs(subscriber, message));
+      return subscriber;
+    }
+
+    string message2 = string.Format(Message.ReadSub2, subscriber);
+    Notify2?.Invoke(subscriber, new SubscriberEventArgs(subscriber, message2));
     return subscriber;
   }
 
@@ -104,14 +137,19 @@ public class MyPhonebook
   /// <param name="number">Номер для поиска.</param>
   public Subscriber ReadByNumber(string number)
   {
-    Subscriber subscriber = List.FirstOrDefault(x => x.Number == number);
-    Console.WriteLine(subscriber?.ToString());
+    Subscriber subscriber = Subscribers.FirstOrDefault(x => x.Number == number);
+    if (subscriber != null)
+    {
+      string message = string.Format(Message.ReadSub, subscriber);
+      Notify2?.Invoke(subscriber, new SubscriberEventArgs(subscriber, message));
+      return subscriber;
+    }
+
+    string message2 = string.Format(Message.ReadSub2, subscriber);
+    Notify2?.Invoke(subscriber, new SubscriberEventArgs(subscriber, message2));
     return subscriber;
   }
 
-  #endregion
-
-  #region Методы изменения записей
 
   /// <summary>
   /// Изменяет имя абонента.
@@ -120,20 +158,22 @@ public class MyPhonebook
   /// <param name="newname">Новое имя.</param>
   public void UpdateName(string name, string newname)
   {
-    int index = List.FindIndex(s => s.Name == name);
-    if (index != -1)
+    Subscriber subscriberToChange = Subscribers.Find(s => s.Name == name);
+    if (subscriberToChange != null)
     {
-      List[index].Name = newname;
+      subscriberToChange.Name = newname;
       string serializedSubscribers =
-        JsonConvert.SerializeObject(List, Formatting.Indented);
+        JsonConvert.SerializeObject(Subscribers, Formatting.Indented);
       File.WriteAllText(path, serializedSubscribers);
-      Console.WriteLine("Изменено успешно.");
-      Console.WriteLine("Name {0}, Number {1}", List[index].Name,
-        List[index].Number);
+      string message = string.Format(Message.UpdateSub, subscriberToChange.Name,
+        subscriberToChange.Number);
+      Notify2?.Invoke(subscriberToChange,
+        new SubscriberEventArgs(subscriberToChange, message));
     }
     else
     {
-      Console.WriteLine("Нет такого абонента.");
+      Notify2?.Invoke(subscriberToChange,
+        new SubscriberEventArgs(subscriberToChange, Message.UpdateSub2));
     }
   }
 
@@ -144,53 +184,69 @@ public class MyPhonebook
   /// <param name="newnumber">Номер новый.</param>
   public void UpdatePhone(string number, string newnumber)
   {
-    int index = List.FindIndex(s => s.Number == number);
-    if (index != -1)
+    Subscriber subscriberToChange = Subscribers.Find(s => s.Number == number);
+    if (subscriberToChange != null)
     {
-      List[index].Number = newnumber;
+      subscriberToChange.Number = newnumber;
       string serializedSubscribers =
-        JsonConvert.SerializeObject(List, Formatting.Indented);
+        JsonConvert.SerializeObject(Subscribers, Formatting.Indented);
       File.WriteAllText(path, serializedSubscribers);
-      Console.WriteLine("Изменено успешно.");
-      Console.WriteLine("Name {0}, Number {1}", List[index].Name,
-        List[index].Number);
+      string message = string.Format(Message.UpdateSub, subscriberToChange.Name,
+        subscriberToChange.Number);
+      Notify2?.Invoke(subscriberToChange,
+        new SubscriberEventArgs(subscriberToChange, message));
     }
     else
     {
-      Console.WriteLine("Нет такого абонента.");
+      Notify2?.Invoke(subscriberToChange,
+        new SubscriberEventArgs(subscriberToChange, Message.UpdateSub2));
     }
   }
 
   /// <summary>
   /// Удаляет запись абонента.
   /// </summary>
-  /// <param name="name">Имя.</param>
-  public void Delete(string name)
+  /// <param name="number">Номер.</param>
+  public void Delete(string number)
   {
-    int index = List.FindIndex(s => s.Name == name);
+    Subscriber subscriberToDelete = Subscribers.Find(s => s.Number == number);
 
-    if (index != -1)
+    if (subscriberToDelete != null)
     {
-      List.RemoveAt(index);
+      Subscribers.Remove(subscriberToDelete);
       string serializedSubscribers =
-        JsonConvert.SerializeObject(List, Formatting.Indented);
+        JsonConvert.SerializeObject(Subscribers, Formatting.Indented);
       File.WriteAllText(path, serializedSubscribers);
-      Console.WriteLine("Абонент удален.");
-      Print();
+      Notify?.Invoke(Message.Delete);
     }
     else
     {
-      Console.WriteLine("Нет такого абонента.");
+      Notify?.Invoke(Message.Delete2);
+      ;
     }
   }
 
   #endregion
 
+  #region События
+
+  public delegate void MyPhonebookMessaging(string message);
+
+  public event MyPhonebookMessaging Notify;
+
+  public delegate void MyPhonebookMessaging2(Subscriber subscriber,
+    SubscriberEventArgs e);
+
+
+  public event MyPhonebookMessaging2 Notify2;
+
+  #endregion
+
   /// <summary>
-  /// Констрктор класса, при инициализации создает лист список абонентов.
+  /// Экземпляр класса.
   /// </summary>
   private MyPhonebook()
   {
-    List = new List<Subscriber>();
+    Subscribers = new List<Subscriber>();
   }
 }

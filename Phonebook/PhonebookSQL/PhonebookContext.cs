@@ -29,7 +29,7 @@ public class PhonebookContext : DbContext
   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
   {
     optionsBuilder.UseNpgsql(
-      "Host=localhost;Port=5432;Database=testdb;Username=postgres;Password=8313");
+      "Host=localhost;Port=5432;Database=testdb;Username=postgres;Password=6789");
   }
 
   /// <summary>

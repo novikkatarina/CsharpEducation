@@ -10,12 +10,22 @@ internal class Program
     string input;
     int intInput;
     ph.ReadAll();
+    ph.Print();
+    ph.Notify += message => Console.WriteLine(message);
+    var subscriber = new Subscriber("name", "number");
+
+    void DisplayMessage(Subscriber subscriber, MyPhonebook.SubscriberEventArgs e)
+    {
+      Console.WriteLine(e.Message);
+    }
+
+    ph.Notify2 += DisplayMessage;
     while (true)
     {
       do
       {
         Console.WriteLine(
-          "1-create, 2- find by name, 3- find by number, 4 - modify by name, 5 - modify by number, 6 - delete, 7 - print, 8- exit");
+          "1-create, 2- find by name, 3- find by number, 4 - update by name, 5 - update by number, 6 - delete, 7 - print, 8- exit");
         input = Console.ReadLine();
       } while (!int.TryParse(input, out intInput));
 
@@ -53,7 +63,7 @@ internal class Program
           ph.UpdatePhone(inputCurrentNumber, inputNewNumber);
           break;
         case 6:
-          Console.WriteLine("Enter subscriber's name to delete");
+          Console.WriteLine("Enter subscriber's number to delete");
           input = Console.ReadLine();
           ph.Delete(input);
           break;
