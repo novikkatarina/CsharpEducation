@@ -1,3 +1,4 @@
+using System.Reflection;
 using Newtonsoft.Json;
 
 namespace Phonebook;
@@ -46,14 +47,17 @@ public class MyPhonebook
   /// <summary>
   /// Путь к файлу с абонентами.
   /// </summary>
-  static string[] paths =
-  {
-    "/", "Users", "user", "Katarina", "Digit", "CsharpEducation", "Phonebook",
-    "Phonebook", "phonebook.txt"
-  };
 
-  string fullPath = Path.Combine(paths);
-
+  // static string[] paths =
+  // { 
+  //   "phonebook.txt"
+  //   
+  // };
+  //
+  // string fullPath = Path.Combine(paths);
+  private string fullPath =
+    Path.Combine(
+      Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "phonebook.txt");
   /// <summary>
   /// Список абонентов.
   /// </summary>
