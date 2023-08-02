@@ -51,7 +51,6 @@ public class MyPhonebook
     "/", "Users", "user", "Katarina", "Digit", "CsharpEducation", "Phonebook",
     "Phonebook", "phonebook.txt"
   };
-
   string fullPath = Path.Combine(paths);
 
   /// <summary>
