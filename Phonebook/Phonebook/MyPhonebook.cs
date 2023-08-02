@@ -7,7 +7,9 @@ namespace Phonebook;
 /// </summary>
 public class MyPhonebook
 {
+  
   #region Вложенные типы
+
   public class SubscriberEventArgs
   {
     /// <summary>
@@ -31,8 +33,9 @@ public class MyPhonebook
       Subscriber = subscriber;
     }
   }
+
   #endregion
-  
+
   #region Поля и свойства
 
   /// <summary>
@@ -43,10 +46,13 @@ public class MyPhonebook
   /// <summary>
   /// Путь к файлу с абонентами.
   /// </summary>
-  public string path =
-    Path.Combine(
-      "/Users/user/Katarina/Digit/CsharpEducation/Phonebook/Phonebook",
-      "phonebook.txt");
+  static string[] paths =
+  {
+    "/", "Users", "user", "Katarina", "Digit", "CsharpEducation", "Phonebook",
+    "Phonebook", "phonebook.txt"
+  };
+
+  string fullPath = Path.Combine(paths);
 
   /// <summary>
   /// Список абонентов.
@@ -85,7 +91,7 @@ public class MyPhonebook
   /// <returns>Список абонентов.</returns>
   public List<Subscriber> ReadAll()
   {
-    string book = File.ReadAllText(path);
+    string book = File.ReadAllText(fullPath);
     Subscribers = JsonConvert.DeserializeObject<List<Subscriber>>(book);
     return Subscribers;
   }
@@ -107,10 +113,9 @@ public class MyPhonebook
     Subscribers.Add(subscriber);
     string serializedSubscribers =
       JsonConvert.SerializeObject(Subscribers, Formatting.Indented);
-    File.WriteAllText(path, serializedSubscribers);
+    File.WriteAllText(fullPath, serializedSubscribers);
     Notify?.Invoke(Message.CreateSub2);
   }
-
 
   /// <summary>
   /// Ищет абонента по имени.
@@ -150,7 +155,6 @@ public class MyPhonebook
     return subscriber;
   }
 
-
   /// <summary>
   /// Изменяет имя абонента.
   /// </summary>
@@ -164,7 +168,7 @@ public class MyPhonebook
       subscriberToChange.Name = newname;
       string serializedSubscribers =
         JsonConvert.SerializeObject(Subscribers, Formatting.Indented);
-      File.WriteAllText(path, serializedSubscribers);
+      File.WriteAllText(fullPath, serializedSubscribers);
       string message = string.Format(Message.UpdateSub, subscriberToChange.Name,
         subscriberToChange.Number);
       Notify2?.Invoke(subscriberToChange,
@@ -190,7 +194,7 @@ public class MyPhonebook
       subscriberToChange.Number = newnumber;
       string serializedSubscribers =
         JsonConvert.SerializeObject(Subscribers, Formatting.Indented);
-      File.WriteAllText(path, serializedSubscribers);
+      File.WriteAllText(fullPath, serializedSubscribers);
       string message = string.Format(Message.UpdateSub, subscriberToChange.Name,
         subscriberToChange.Number);
       Notify2?.Invoke(subscriberToChange,
@@ -216,7 +220,7 @@ public class MyPhonebook
       Subscribers.Remove(subscriberToDelete);
       string serializedSubscribers =
         JsonConvert.SerializeObject(Subscribers, Formatting.Indented);
-      File.WriteAllText(path, serializedSubscribers);
+      File.WriteAllText(fullPath, serializedSubscribers);
       Notify?.Invoke(Message.Delete);
     }
     else
