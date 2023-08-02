@@ -13,7 +13,7 @@
 
     <ItemGroup>
       <None Update="phonebook.txt">
-        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
     </ItemGroup>
 
