@@ -10,7 +10,7 @@ public partial class MainPage : ContentPage
 
   private bool isPlayer1Turn = true;
   private int count = 0;
-  string[,] board;
+  private string[,] board;
   private MyViewModel viewModel;
 
   /// <summary>
@@ -55,10 +55,13 @@ public partial class MainPage : ContentPage
   /// Проверяет выигрыш или ничья.
   /// </summary>
   /// <param name="player"></param>
+
+  #region Проверка выигрыша
+
   private void CheckWinOrDraw(string player)
   {
-    bool isWin = Logic.IsWin(board, player);
-    bool isDraw = Logic.IsDraw(board);
+    bool isWin = TicTacToeLogic.IsWin(board, player);
+    bool isDraw = TicTacToeLogic.IsDraw(board);
 
     if (isWin)
     {
@@ -77,6 +80,8 @@ public partial class MainPage : ContentPage
       DisableAllButtons();
     }
   }
+
+  #endregion
 
   /// <summary>
   /// Отключает все кнопки.
@@ -123,11 +128,12 @@ public partial class MainPage : ContentPage
 
     button.Text = player;
     button.IsEnabled = false;
-    
+
     board[row, col] = player;
     CheckWinOrDraw(player);
   }
 
+  #region Обработчики нажатия
 
   /// <summary>
   /// Обработчик нажатия на кнопку 0 0.
@@ -200,4 +206,6 @@ public partial class MainPage : ContentPage
   {
     TurnPlayer(Button22, 2, 2);
   }
+
+  #endregion
 }
