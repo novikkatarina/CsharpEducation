@@ -9,5 +9,37 @@
 
 using PracticTask3.Task1;
 
-double S1 = new Circle().CalculateArea(2);
-double S2 = new Rectangle().CalculateArea(2, 3);
+// double S1 = new Circle().CalculateArea(2);
+// double S2 = new Rectangle().CalculateArea(2, 3);
+
+// using PracticTask3.Task2;
+//
+// Cat cat = new Cat();
+// cat.MakeSound();
+// Dog dog = new Dog();
+// // dog.MakeSound();
+
+
+// using PracticTask3.Task3;
+//
+// Temperature t = new Temperature(10.0);
+//
+// // неявное преобразование 
+// // implicit неявное C => F
+// double temp = t;
+// Console.WriteLine(temp);
+//
+// // explicit - явное
+// // явное преобразование C => F
+// double d = 10;
+// Temperature t2 = ( Temperature )d;
+//
+// // implicit 
+// // F => C 
+// float f = t;
+//
+// //explicit
+// // F => C
+// Temperature t3 = (Temperature)f;
+
+
