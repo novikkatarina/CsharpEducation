@@ -61,7 +61,39 @@
 
 //Task3.
 
-using PracticTask4;
+// using PracticTask4;
+//
+// Person p = new Person();
+// p.CheckAge();
 
-Person p = new Person();
-p.CheckAge();
+//Task4
+
+ using PracticTask4;
+ 
+ FileReading file = new FileReading();
+ file.Read();
+
+// using System.Reflection;
+// using Newtonsoft.Json;
+
+// string path =
+//   Path.Combine(
+//     Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "FileToRead.txt");
+//
+// // string jsonString = JsonSerializer.Serialize(path);
+//
+//  using (StreamReader sr = new StreamReader(path))
+//  {
+//    string line = sr.ReadLine();
+//    //Continue to read until you reach end of file
+//    while (line != null)
+//    {
+//      //write the line to console window
+//      Console.WriteLine(line);
+//      //Read the next line
+//      line = sr.ReadLine();
+//    }
+//
+//    //close the file
+//    sr.Close();
+//  }
