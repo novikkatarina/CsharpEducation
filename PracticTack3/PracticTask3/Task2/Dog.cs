@@ -1,5 +1,4 @@
-namespace PracticTask3.Task2;
-
+namespace Task2;
 public class Dog : Animal
 {
   public override void MakeSound()

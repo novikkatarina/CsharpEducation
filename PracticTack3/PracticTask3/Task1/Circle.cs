@@ -1,4 +1,4 @@
-namespace PracticTask3.Task1;
+namespace Task1;
 
 public class Circle : Shape
 {
