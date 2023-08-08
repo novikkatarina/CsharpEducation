@@ -1,15 +1,5 @@
 namespace Task9;
 
-// Создайте класс "Человек" (Person) с полями "Имя" (Name) и "Возраст"
-//   (Age). Переопределите методы "ToString()", "Equals()" и "GetHashCode()"
-// из класса Object, чтобы они возвращали информацию об объекте в виде
-//   строки, проверяли эквивалентность двух объектов "Человек" и
-//   генерировали уникальный хэш-код для каждого объекта, соответственно.
-// Создайте несколько экземпляров класса "Человек" и проверьте работу
-// переопределенных методов, например, сравнивая объекты на
-// эквивалентность и выводя информацию о каждом объекте с помощью
-//   метода "ToString()".
-
 public class Person
 {
   public string Name { set; get; }
@@ -23,16 +13,25 @@ public class Person
 
   public override string ToString()
   {
-    return base.ToString($"Имя: {Name}");
+    return $"Name: {this.Name}, Age: {this.Age}";
   }
 
   public override bool Equals(object? obj)
   {
-    return base.Equals(obj);
+    if (obj is Person)
+    {
+      Person person2 = ( Person )obj;
+      if (( person2.Name == this.Name ) & ( person2.Age == this.Age ))
+      {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   public override int GetHashCode()
   {
-    return base.GetHashCode();
+    return HashCode.Combine(Name, Age);
   }
 }

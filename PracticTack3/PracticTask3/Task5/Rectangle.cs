@@ -8,6 +8,7 @@ public class Rectangle : Shape
   {
     this.Square = square;
   }
+
   public override void Draw()
   {
     base.Draw();

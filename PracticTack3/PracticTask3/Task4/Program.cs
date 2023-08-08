@@ -19,5 +19,5 @@ Console.WriteLine(distance);
 
 // Явное преобразование из float в Distance.
 // Из km в m.
-Distance distance2 = (Distance)distance;
+Distance distance2 = ( Distance )distance;
 Console.WriteLine($"{distance2}");
