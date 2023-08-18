@@ -32,10 +32,10 @@ public class BankAccount
 
   public event BankAccountMessaging Notify;
 
+  public delegate void AccountTransactionDelegate(double money);
+
   public BankAccount()
   {
     this.Deposit = 0;
   }
-
-  public delegate void AccountTransactionDelegate(double money);
 }

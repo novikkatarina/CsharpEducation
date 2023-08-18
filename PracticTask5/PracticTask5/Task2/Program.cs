@@ -1,4 +1,12 @@
-﻿string[] arr = new string[] { new("one"), new("two"), new("six"), };
+﻿//  Создайте программу, которая принимает список строк и фильтрует его на
+//  основе определенного критерия. Разрешите пользователю выбрать с
+//  помощью делегата `Predicate<T>` условие фильтрации. Создайте
+//  методы, которые будут вызываться в качестве аргумента делегата для
+//  проверки строк и передайте их в метод фильтрации.
+
+using System.Data;
+
+string[] arr = new string[] { new("one1"), new("two"), new("six666"), };
 
 int LengthCompare(string x, string y)
 {
@@ -14,6 +22,7 @@ string input = null;
 
 var sortByLength = new Comparison<string>(LengthCompare);
 
+var sortByLetter = new Comparison<string>(FirstLetterCompare);
 do
 {
   Console.WriteLine(

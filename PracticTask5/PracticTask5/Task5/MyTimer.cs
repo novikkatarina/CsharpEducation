@@ -4,11 +4,6 @@ public class MyTimer
 {
   private int Interval { get; set; }
 
-  public MyTimer(int interval)
-  {
-    Interval = interval;
-  }
-
   public void Start()
   {
     while (true)
@@ -21,4 +16,9 @@ public class MyTimer
   public delegate void Tick(string message);
 
   public event Tick Notify;
+
+  public MyTimer(int interval)
+  {
+    Interval = interval;
+  }
 }

@@ -1,4 +1,11 @@
-﻿string[] words = new string[] { "one", "two", "six" };
+﻿//  Создайте программу, которая принимает список слов и преобразует
+//  каждое слово с помощью заданного делегата `Func<T, TResult>`.
+//  Позвольте пользователю выбрать делегат для преобразования слов.
+//  Создайте методы, которые будут вызываться в качестве аргумента
+//  делегата для преобразования слов и передайте их в метод обработки
+//  списка слов.
+
+string[] words = { "one", "two", "six" };
 
 string[] Transition(string[] words, Func<string[], string[]> operation)
 {
@@ -30,7 +37,7 @@ string[] DoubleWords(string[] words)
   return result.ToArray();
 }
 
-string input = "";
+string input;
 
 do
 {
