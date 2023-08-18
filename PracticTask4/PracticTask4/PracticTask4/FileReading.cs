@@ -9,8 +9,8 @@ using System.Text.Json;
 public class FileReading
 {
   string path = Path.Combine(
-  Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
-  "FileToRead.txt");
+    Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
+    "FileToRead.txt");
   // public const string path =
   //   "/FileReading.txt";
 
@@ -35,7 +35,7 @@ public class FileReading
         //Попытка десериализовать объект по ссылке в json - если формат не совпадет из-за ошибок внутри файла - будет ошибка JsonReaderException
         string content = File.ReadAllText(path);
         var jsonObject = JsonConvert.DeserializeObject(content);
-        
+
         using (StreamReader sr = new StreamReader(path))
         {
           string line = sr.ReadLine();
@@ -82,11 +82,10 @@ public class FileReading
         Console.WriteLine($"Generic Exception Handler: {e}");
         continue;
       }
-
-      // Console.WriteLine(jsonString);
       isCorrect = true;
     } while (!isCorrect);
 
     Console.WriteLine("123");
   }
+
 }

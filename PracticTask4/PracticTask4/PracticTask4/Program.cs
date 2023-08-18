@@ -68,13 +68,13 @@
 
 //Task4
 
- using PracticTask4;
- 
- FileReading file = new FileReading();
- file.Read();
+using PracticTask4;
+
+FileReading file = new FileReading();
+file.Read();
+
 
 // using System.Reflection;
-// using Newtonsoft.Json;
 
 // string path =
 //   Path.Combine(
