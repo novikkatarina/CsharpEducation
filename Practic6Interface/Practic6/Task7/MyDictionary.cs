@@ -6,14 +6,12 @@ public class MyDictionary : IEnumerable
 {
   public Dictionary<string, int> Items { set; get; }
 
+  public IEnumerator GetEnumerator() => new MyDictionaryEnumerator(Items);
 
   public MyDictionary(Dictionary<string, int> dict)
   {
     Items = dict;
   }
-
-
-  public IEnumerator GetEnumerator() => new MyDictionaryEnumerator(Items);
 }
 
 class MyDictionaryEnumerator : IEnumerator
@@ -21,11 +19,6 @@ class MyDictionaryEnumerator : IEnumerator
   private Dictionary<string, int> dictionary;
   private IEnumerator<KeyValuePair<string, int>> enumerator;
 
-  public MyDictionaryEnumerator(Dictionary<string, int> items)
-  {
-    dictionary = items;
-    enumerator = dictionary.GetEnumerator();
-  }
 
   public bool MoveNext()
   {
@@ -38,4 +31,10 @@ class MyDictionaryEnumerator : IEnumerator
   }
 
   public object Current => enumerator.Current;
+
+  public MyDictionaryEnumerator(Dictionary<string, int> items)
+  {
+    this.dictionary = items;
+    this.enumerator = dictionary.GetEnumerator();
+  }
 }

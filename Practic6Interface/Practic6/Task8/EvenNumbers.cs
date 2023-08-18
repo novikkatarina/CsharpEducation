@@ -6,11 +6,6 @@ public class EvenNumbers : IEnumerable
 {
   private List<int> Items { get; set; }
 
-  public EvenNumbers(List<int> items)
-  {
-    Items = items;
-  }
-
   public IEnumerator GetEvenNumbers()
   {
     for (int i = 0; i < this.Items.Count; i++)
@@ -23,5 +18,10 @@ public class EvenNumbers : IEnumerable
   public IEnumerator GetEnumerator()
   {
     return GetEvenNumbers();
+  }
+
+  public EvenNumbers(List<int> items)
+  {
+    Items = items;
   }
 }

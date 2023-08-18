@@ -3,14 +3,6 @@ using System.Text;
 
 namespace Task1;
 
-// Реализуйте методы интерфейса `IStorage<T>` в классе `ListStorage<T>`:
-// - Добавление элемента в хранилище должно быть реализовано с помощью метода
-//   `Add()` коллекции `List<T>`.
-// - Получение элемента из хранилища по индексу должно быть реализовано с
-//   помощью индексатора коллекции `List<T>`.
-// - Количество элементов в хранилище должно быть реализовано с помощью свойства
-//   `Count` коллекции `List<T>`.
-
 public class ListStorage<T> : IStorage<T>, IEnumerable<int>
 {
   public List<T> List { set; get; }
@@ -20,15 +12,20 @@ public class ListStorage<T> : IStorage<T>, IEnumerable<int>
     List.Add(item);
     Count++;
   }
+
   public T Get(int index)
   {
     var items = List;
-    if (index > Count){ Console.WriteLine("Индекс больше допустимого.");
+    if (index > Count)
+    {
+      Console.WriteLine("Индекс больше допустимого.");
       return default;
     }
+
     T item = items.ElementAt(index);
     return item;
   }
+
   public int Count { get; set; }
 
   public ListStorage()
@@ -44,6 +41,7 @@ public class ListStorage<T> : IStorage<T>, IEnumerable<int>
     {
       sb.Append(item);
     }
+
     return sb.ToString();
   }
 

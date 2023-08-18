@@ -1,6 +1,8 @@
 ﻿using Task5;
 
-
+//  Создайте класс "Car" с полями "Make" и "Model". Реализуйте интерфейс IComparer
+//  для этого класса, чтобы можно было сравнивать машины по марке и модели. В
+//  задании требуется реализовать несколько вариантов сравнения.
 
 CompareMark cmark = new CompareMark();
 CompareModel cmodel = new CompareModel();

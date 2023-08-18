@@ -1,18 +1,14 @@
-﻿//
-// 1. Создайте метод расширения "IsPalindrome", который будет проверять, является ли
+﻿//   1. Создайте метод расширения "IsPalindrome", который будет проверять, является ли
 //   строка палиндромом.
-
-
 
 string str = "anna";
 
-bool IsExt = str.IsPalindromeExtension();
-Console.WriteLine(IsExt);
+bool Ext = str.IsPalindrome();
+Console.WriteLine(Ext);
 
 static class StringExtension
 {
-
-  public static bool IsPalindromeExtension(this string str)
+  public static bool IsPalindrome(this string str)
   {
     string palindrom = new string(str.Reverse().ToArray());
 

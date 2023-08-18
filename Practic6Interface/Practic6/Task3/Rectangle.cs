@@ -11,15 +11,14 @@ public class Rectangle : ICloneable
     return new Rectangle(this.Width, this.Height);
   }
 
+  public override string ToString()
+  {
+    return $"Width: {Width}, Height: {Height}";
+  }
+
   public Rectangle(int width, int height)
   {
     this.Width = width;
     this.Height = height;
   }
-
-  public override string ToString()
-  {
-    return $"Width: {Width}, Height: {Height}";
-  }
 }
-

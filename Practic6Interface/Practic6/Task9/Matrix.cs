@@ -2,12 +2,7 @@ namespace Task9;
 
 public class Matrix
 {
-  private int [,] Data { get; set; }
-
-  public Matrix(int row, int col)
-  {
-    Data = new int[row, col];
-  }
+  public int[,] Data { get; set; }
 
   public int this[int row, int column]
   {
@@ -19,5 +14,10 @@ public class Matrix
     {
       Data[row, column] = value;
     }
+  }
+
+  public Matrix(int row, int col)
+  {
+    Data = new int[row, col];
   }
 }

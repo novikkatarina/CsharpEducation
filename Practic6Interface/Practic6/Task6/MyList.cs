@@ -5,7 +5,7 @@ namespace Task6;
 public class MyList : IEnumerable
 {
   public List<int> Items { set; get; }
-  
+
   public IEnumerator GetEnumerator()
   {
     for (int i = 0; i < this.Items.Count; i++)
