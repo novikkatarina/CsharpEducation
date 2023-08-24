@@ -2,14 +2,14 @@ namespace Task10;
 
 public class Stack<T>
 {
-  public List<T> Conteiner { set; get; }
-  public int count;
-  public int size;
+  private List<T> Container { set; get; }
+  private int count;
+  private int size;
 
   public Stack(int size)
   {
     List<T> conteiner = new List<T>();
-    this.Conteiner = conteiner;
+    this.Container = conteiner;
     this.count = -1;
     this.size = size;
   }
@@ -23,29 +23,29 @@ public class Stack<T>
         ("Stack overflow");
     }
 
-    Conteiner.Add(number);
+    Container.Add(number);
   }
 
   public T Pop()
   {
-    if (Conteiner is null)
+    if (Container is null)
     {
       throw new InvalidOperationException("Empty stack");
     }
 
-    T poped = Conteiner[count];
-    Conteiner.RemoveAt(count);
+    T poped = Container[count];
+    Container.RemoveAt(count);
     count--;
     return poped;
   }
 
   public T Peek()
   {
-    if (Conteiner is null)
+    if (Container is null)
     {
       throw new InvalidOperationException("Empty stack");
     }
 
-    return Conteiner[count];
+    return Container[count];
   }
 }
