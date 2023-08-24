@@ -32,7 +32,7 @@ namespace TicTacToe.GUI
                         !IsWinPossible(array[0, 2], array[1, 1], array[2, 0]));
 
       // If no draw condition is found, return false
-      return possibilities.Count(x => x == true) <= 6;
+      return possibilities.Count(x => x == true) >= 7;
     }
 
 

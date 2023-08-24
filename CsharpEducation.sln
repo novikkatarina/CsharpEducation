@@ -2,9 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Task1", "Task1\Task1.csproj", "{23C75F10-7864-4B52-B722-AFDC6F00E7BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicTacToe.ConsoleApp", "Solution1\TicTacToe\TicTacToe.ConsoleApp\TicTacToe.ConsoleApp.csproj", "{E90EFF24-23AF-4100-82E8-84F60D3075F3}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicTacToe.GUI", "Solution1\TicTacToe\TicTacToe.GUI\TicTacToe.GUI.csproj", "{A8A4EEE6-7590-476C-8DAB-02C106CCA6A6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PracticTask3", "PracticTack3\PracticTask3\PracticTask3\PracticTask3.csproj", "{650EB65F-3A3F-47D9-9C1F-AD46B5CB62FD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PracticTask4", "PracticTask4\PracticTask4\PracticTask4\PracticTask4.csproj", "{D36A7C59-2684-446D-BDF5-A5836056AFD3}"
 EndProject
