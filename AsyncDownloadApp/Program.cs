@@ -6,14 +6,13 @@ do
   Console.Write("Введите URL-адрес файла: ");
   string url = Console.ReadLine();
 
-  Console.Write("Введите путь сохранения файла: "); //
+  Console.Write("Введите путь сохранения файла: ");
   string path = Console.ReadLine();
 
   await AsyncDownloadSave(url, path);
+  
   Console.WriteLine(" Для выхода - ввести 1.");
-
   int input = Convert.ToInt32(Console.ReadLine());
-
   if (input != 1) flag = true;
 
   Console.WriteLine("Файл был успешно загружен и сохранен.");
@@ -29,30 +28,12 @@ static async Task AsyncDownloadSave(string path, string name)
   try
   {
     using var client = new WebClient();
-    // await client.DownloadFileTaskAsync(path,name);
     Console.WriteLine("start");
-
-    // string myStringWebResource = path + name;
-    // Console.WriteLine(myStringWebResource);
-
     await client.DownloadFileTaskAsync(path, name);
     Console.WriteLine(name, path);
   }
-  catch (Exception e)
+  catch (Exception)
   {
     Console.WriteLine(( "При загрузке возникла ошибка" ));
-    // throw;
-  }
-
-  try
-  {
-  }
-  catch
-  {
-  }
-  finally
-  {
   }
 }
-
-Console.WriteLine();
