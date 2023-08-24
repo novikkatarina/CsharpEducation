@@ -19,7 +19,7 @@ public class MyViewModel : INotifyPropertyChanged
     }
   }
 
-  private string myText2 = "Ходит X";
+  private string myText2 = Player.X.ToString();
 
   public string MyText2
   {

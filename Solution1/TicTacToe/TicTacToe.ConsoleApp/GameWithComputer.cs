@@ -1,33 +1,31 @@
-namespace TicTacToe.GUI.ConsoleApp;
+namespace TicTacToe.ConsoleApp;
 
 /// <summary>
 /// Описывает режим игры против компьютера.
 /// </summary>
-public class VersusComputer
+public class VersusComputer : IGamingStrategy
 {
   /// <summary>
   /// Игровое поле.
   /// </summary>
   private Board board;
 
-  /// <summary>
-  /// Конструктор.
-  /// </summary>
-  public VersusComputer()
-  {
-    board = new Board(3);
-  }
+  public Board Board { get { return board; } }
+
 
   /// <summary>
   /// Запускает режим игры против компьютера.
   /// </summary>
+
+  #region Метод игры компьютера с игроком
+
   public void Play()
   {
-    const string computer = "X";
-    const string player = "O";
+    string computer = Player.X.ToString();
+    string player = Player.O.ToString();
 
-    // First step for computer - in the center (cell = 4)
-    Logic.CalculateCell(4, 3, out int computerCellRow,
+    // First step for computer - in the center (cell = 4).
+    TicTacToeLogic.CalculateCell(4, 3, out int computerCellRow,
       out int computerCellCol);
     PrintPause();
 
@@ -35,16 +33,16 @@ public class VersusComputer
     board.SetSymbol(computerCellRow, computerCellCol, computer);
     board.Print();
 
-    // PLayer step
-    Logic.Turn(player, board.Array, out int userCell, 3, out int row,
+    // PLayers step.
+    TicTacToeLogic.Turn(player, board.Array, out int userCell, 3, out int row,
       out int col);
     board.Print();
 
-    // Second step of computer - as far as it's possible from O's second step
+    // Second step of computer - as far as it's possible from O's second step.
     double maxDistance = -1;
     int farCell = 0;
 
-    // If previous player's step was in the center steps (1, 3, 5, 7) - calculating the most far cell
+    // If previous player's step was in the center steps (1, 3, 5, 7) - calculating the most far cell.
     if (( userCell == 1 ) || ( userCell == 3 ) || ( userCell == 5 ) ||
         ( userCell == 7 ))
     {
@@ -55,7 +53,7 @@ public class VersusComputer
           if (board.Array[i, j] != computer && board.Array[i, j] != player)
           {
             int cell = i * board.GetSize() + j;
-            double distance = Logic.CalculateDistance(cell, userCell);
+            double distance = TicTacToeLogic.CalculateDistance(cell, userCell);
             if (distance > maxDistance)
             {
               maxDistance = distance;
@@ -71,7 +69,7 @@ public class VersusComputer
       board.SetSymbol(row, col, computer);
     }
 
-    // Else make step in the corner
+    // Else make step in the corner.
     else
     {
       int cellAttempt = -2;
@@ -91,36 +89,38 @@ public class VersusComputer
 
     board.Print();
 
-    //Next step for player
 
-    Logic.Turn(player, board.Array, out userCell, 3, out row, out col);
+    //Next steps for players.
+
+    TicTacToeLogic.Turn(player, board.Array, out userCell, 3, out row, out col);
     board.Print();
 
     while (true)
     {
       TurnComputer(board.Array, computer, player);
-      if (Logic.IsWin(board.Array, "X"))
+      if (TicTacToeLogic.IsWin(board.Array, computer))
       {
-        Console.WriteLine("X won!");
+        Console.WriteLine($"{computer} won!");
         return;
       }
 
-      if (Logic.IsDraw(board
+      if (TicTacToeLogic.IsDraw(board
             .Array)) //turn off this loop in case of field size > 3
       {
         Console.WriteLine("It's a tie!");
         return;
       }
 
-      Logic.Turn("O", board.Array, out userCell, 3, out row, out col);
+      TicTacToeLogic.Turn(player, board.Array, out userCell, 3, out row,
+        out col);
       board.Print();
-      if (Logic.IsWin(board.Array, "O"))
+      if (TicTacToeLogic.IsWin(board.Array, player))
       {
         Console.WriteLine("O won!");
         return;
       }
 
-      if (Logic.IsDraw(board
+      if (TicTacToeLogic.IsDraw(board
             .Array)) //turn off this loop in case of field size > 3
       {
         Console.WriteLine("It's a tie!");
@@ -128,6 +128,8 @@ public class VersusComputer
       }
     }
   }
+
+  #endregion
 
   #region Функции компьютера
 
@@ -141,7 +143,7 @@ public class VersusComputer
   {
     //Case 1. Checking if computer can win.
 
-    if (Logic.IsComputerWin(array, player, computer))
+    if (TicTacToeLogic.IsComputerWin(array, player, computer))
     {
       PrintPause();
       board.Print();
@@ -149,7 +151,7 @@ public class VersusComputer
     }
 
     // Case 2. Checking if player can win and stop him.
-    if (Logic.IsPlayerWin(array, player, computer))
+    if (TicTacToeLogic.IsPlayerWin(array, player, computer))
     {
       PrintPause();
       board.Print();
@@ -190,4 +192,12 @@ public class VersusComputer
   }
 
   #endregion
+
+  /// <summary>
+  /// Конструктор класса VersusComputer игры игрока против компьютера.
+  /// </summary>
+  public VersusComputer()
+  {
+    board = new Board(3);
+  }
 }
