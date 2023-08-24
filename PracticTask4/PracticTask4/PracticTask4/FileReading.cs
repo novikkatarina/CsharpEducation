@@ -3,9 +3,6 @@ using Newtonsoft.Json;
 
 namespace PracticTask4;
 
-using System.IO;
-using System.Text.Json;
-
 public class FileReading
 {
   string path = Path.Combine(
