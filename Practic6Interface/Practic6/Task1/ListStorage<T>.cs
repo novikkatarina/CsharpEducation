@@ -1,9 +1,8 @@
 using System.Collections;
-using System.Text;
 
 namespace Task1;
 
-public class ListStorage<T> : IStorage<T>, IEnumerable<int>
+public class ListStorage<T> : IStorage<T>, IEnumerable
 {
   public List<T> List { set; get; }
 
@@ -18,8 +17,7 @@ public class ListStorage<T> : IStorage<T>, IEnumerable<int>
     var items = List;
     if (index > Count)
     {
-      Console.WriteLine("Индекс больше допустимого.");
-      return default;
+      throw new ArgumentException("Индекс больше допустимого.");
     }
 
     T item = items.ElementAt(index);
@@ -34,24 +32,12 @@ public class ListStorage<T> : IStorage<T>, IEnumerable<int>
     this.List = new List<T>();
   }
 
-  public override string ToString()
+  public IEnumerator GetEnumerator()
   {
-    StringBuilder sb = new StringBuilder();
-    foreach (var item in List)
+    for (int i = 0; i < this.List.Count; i++)
     {
-      sb.Append(item);
+      yield return List[i];
     }
-
-    return sb.ToString();
   }
 
-  public IEnumerator<int> GetEnumerator()
-  {
-    throw new NotImplementedException();
-  }
-
-  IEnumerator IEnumerable.GetEnumerator()
-  {
-    return GetEnumerator();
-  }
 }
