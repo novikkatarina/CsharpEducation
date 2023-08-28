@@ -1,7 +1,6 @@
 ﻿using NUnit.Framework;
 
 namespace Phonebook.Tests;
-using System.Data.Objects;
 
 public class Tests
 {
@@ -18,7 +17,6 @@ public class Tests
     [TearDown]
     public void TearDown()
     {
-        DeleteObject(Phonebook);
     }
     
     
