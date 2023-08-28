@@ -8,53 +8,39 @@ namespace AsyncDownloadApp;
 /// </summary>
 public class DownloaderSaver
 {
+  public class ExecutingAppTimeCharacteristics
+  {
+    public DateTime StartingTime { set; get; }
+    public DateTime TimeOfFinishing { set; get; }
+  }
+
+
   /// <summary>
   /// Скачивает и сохраненяет файл по ссылке.
   /// </summary>
   /// <param name="path">URL путь для скачивания файлаю</param>
   /// <param name="name">Имя файла для сохраннения.</param>
-  public async Task AsyncDownloadSave(string path, string name)
+  public async Task<ExecutingAppTimeCharacteristics> AsyncDownloadSave(
+    string path, string name)
   {
+    var timeCharacteristics = new ExecutingAppTimeCharacteristics();
     try
     {
       using var client = new WebClient();
-      DateTime time = DateTime.Now;
-      Console.WriteLine($"Started {name} at {time:hh:mm:ss.fff}");
-      client.DownloadFileCompleted += (sender, args) =>
-        DownloadFileCallback(name, time, sender, args);
 
-      await client.DownloadFileTaskAsync(new Uri(path), name);
+
+      timeCharacteristics.StartingTime = DateTime.Now;
+      // Console.WriteLine($"Started {name} at {timeCharacteristics.StartingTime:hh:mm:ss.fff}");
+      // client.DownloadFileCompleted += (sender, args) =>
+      //   DownloadFileCallback(name, timeCharacteristics.StartingTime, sender, args);
+      await client.DownloadFileTaskAsync(path, name);
+      timeCharacteristics.TimeOfFinishing = DateTime.Now;
     }
     catch (Exception e)
     {
       Console.WriteLine(e.Message);
     }
-  }
 
-  /// <summary>
-  /// Обрабатывает событие.
-  /// </summary>
-  /// <param name="fileName">Имя сохраняемого файла.</param>
-  /// <param name="startTime">Время начала загрузки.</param>
-  /// <param name="sender">Объект, генерирующий событие.</param>
-  /// <param name="asyncCompletedEventArgs">Класс, предоставляющий данные о событии.</param>
-  void DownloadFileCallback(string fileName, DateTime startTime,
-    object? sender,
-    AsyncCompletedEventArgs asyncCompletedEventArgs)
-  {
-    DateTime timeOfFinishing = DateTime.Now;
-    Console.WriteLine(
-      $"Finished {fileName} at {timeOfFinishing:hh:mm:ss.fff}");
-    Console.WriteLine(
-      $"Elapsed time for {fileName} is {timeOfFinishing - startTime}");
-    if (asyncCompletedEventArgs.Cancelled)
-    {
-      Console.WriteLine("File download cancelled.");
-    }
-
-    if (asyncCompletedEventArgs.Error != null)
-    {
-      Console.WriteLine(asyncCompletedEventArgs.Error.ToString());
-    }
+    return timeCharacteristics;
   }
 }
