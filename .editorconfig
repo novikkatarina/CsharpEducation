@@ -1,0 +1,80 @@
+# Editor configuration for C# code
+
+# Use 2 spaces for indentation
+[*]
+indent_style = space
+indent_size = 2
+
+# One statement per line
+csharp_new_line_before_open_brace = control_blocks
+
+# Line breaks after comma and operators
+csharp_new_line_before_colon = all
+csharp_new_line_before_catch = true
+csharp_new_line_before_else = true
+csharp_new_line_before_finally = true
+csharp_new_line_before_member = true
+csharp_new_line_before_open_brace = all
+csharp_new_line_before_return = true
+csharp_new_line_before_while_in_do = true
+csharp_new_line_between_query_expression_clauses = true
+
+# Indent after line breaks
+csharp_indent_case_contents = true
+csharp_indent_case_contents_when_block = true
+csharp_indent_labels = flush_left
+csharp_indent_switch_labels = true
+csharp_indent_switch_labels_when_block = true
+
+# Blank lines
+csharp_blank_line_before_else = true
+csharp_blank_line_before_while = true
+csharp_blank_lines_after_declarations = 1
+csharp_blank_lines_after_namespace = 2
+csharp_blank_lines_after_using_directives = 2
+csharp_blank_lines_between_members = 1
+csharp_blank_lines_around_field = 0
+csharp_blank_lines_around_namespace = 0
+
+# Spaces around operators
+csharp_space_after_colon_in_inheritance_clause = true
+csharp_space_after_comma = true
+csharp_space_after_semicolon_in_for_statement = true
+csharp_space_around_binary_operators = before_and_after
+csharp_space_around_declaration_statements = false
+csharp_space_around_equals_assignment = true
+csharp_space_around_shift_operators = before_and_after
+
+# Brace style
+csharp_prefer_braces = true
+csharp_prefer_braces_for_control_blocks = true
+csharp_prefer_braces_for_multi_line_control_blocks = true
+
+# No space between method name and parameters
+csharp_space_after_method_call_name = false
+
+# Open curly brace placement
+csharp_style_new_line_before_else = true
+csharp_style_new_line_before_while = true
+
+# Indentation inside code blocks
+csharp_indent_block_contents = true
+
+# No space before method call parentheses
+csharp_space_before_method_call_parameter_list = false
+
+# No space before comma
+csharp_space_before_open_square_brackets = false
+csharp_space_before_semicolon = false
+
+# Open brace placement for methods and classes
+csharp_place_open_brace_on_new_line_for_methods = true
+csharp_place_open_brace_on_new_line_for_types = true
+
+# Keep empty block body braces on the same line
+csharp_style_empty_block_body = false
+
+# Remove empty lines
+csharp_remove_blank_lines_between_blocks = true
+csharp_remove_blank_lines_between_members = true
+
