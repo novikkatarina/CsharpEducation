@@ -4,12 +4,12 @@ namespace AsyncDownloadAppTests;
 
 public class Tests
 {
-  public DownloaderSaver ds { set; get; }
+  public DownloaderSaver downloaderSave { set; get; }
 
   [SetUp]
   public void Setup()
   {
-    ds = new DownloaderSaver();
+    downloaderSave = new DownloaderSaver();
   }
 
   [Test]
@@ -26,7 +26,7 @@ public class Tests
     // Act
     var tasks = new List<Task<DownloaderSaver.ExecutingAppTimeCharacteristics>>
     {
-      ds.AsyncDownloadSave(path, name), ds.AsyncDownloadSave(path2, name2)
+      downloaderSave.AsyncDownloadSave(path, name), downloaderSave.AsyncDownloadSave(path2, name2)
     };
 
     await Task.WhenAll(tasks);
