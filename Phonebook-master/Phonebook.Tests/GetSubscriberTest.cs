@@ -4,37 +4,36 @@ namespace Phonebook.Tests;
 
 public class Tests
 {
-    private List<PhoneNumber> PhoneNumber { set; get; }
+    private List<PhoneNumber> PhoneNumbers { set; get; }
     private Phonebook Phonebook { set; get; }
 
     [SetUp]
     public void Setup()
     {
         Phonebook = new Phonebook();
-        PhoneNumber = new List<PhoneNumber>();
+        PhoneNumbers = new List<PhoneNumber>();
     }
 
     [TearDown]
     public void TearDown()
     {
+        PhoneNumbers.Clear();
     }
-    
-    
+
+
     [Test]
     public void GetSubscriber_ExistedSubscriber_SuccessfullyFound()
     {
         //Arrange
-        PhoneNumber phoneNumber = new PhoneNumber("13452", PhoneNumberType.Personal);
-        PhoneNumber.Add(phoneNumber);
-        Subscriber existedSubscriber = new Subscriber(Guid.NewGuid(), "DFR", PhoneNumber);
+        PhoneNumber phoneNumber = new PhoneNumber("+1 (555) 123-4567", PhoneNumberType.Personal);
+        PhoneNumbers.Add(phoneNumber);
+        Subscriber existedSubscriber = new Subscriber(Guid.NewGuid(), "Kate", PhoneNumbers);
         Phonebook.AddSubscriber(existedSubscriber);
-        
+
         // Act
-
         Subscriber findedSubscriber = Phonebook.GetSubscriber(existedSubscriber.Id);
-        
-        //Assert
-        Assert.AreEqual(existedSubscriber,findedSubscriber);
-    }
 
+        //Assert
+        Assert.AreEqual(existedSubscriber, findedSubscriber);
+    }
 }

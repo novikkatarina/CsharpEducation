@@ -5,6 +5,19 @@
 /// </summary>
 public class PhoneNumber
 {
+  protected bool Equals(PhoneNumber other)
+  {
+    return Number == other.Number && Type == other.Type;
+  }
+
+  public override bool Equals(object? obj)
+  {
+    if (ReferenceEquals(null, obj)) return false;
+    if (ReferenceEquals(this, obj)) return true;
+    if (obj.GetType() != this.GetType()) return false;
+    return Equals((PhoneNumber)obj);
+  }
+
   /// <summary>
   /// Значение номера телефона.
   /// </summary>
