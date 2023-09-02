@@ -9,5 +9,5 @@ public class PhoneNumberValidatorTests
     {
         Assert.Throws<ArgumentException>(() =>
             PhoneNumberValidator.Validate(new PhoneNumber("+123 789-0123", PhoneNumberType.Personal)));
-    }
+    } 
 }
